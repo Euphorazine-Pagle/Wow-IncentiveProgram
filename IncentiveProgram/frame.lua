@@ -154,7 +154,7 @@ local IncentiveProgramFrame = {
         self.ipFrame.rightGradiant:Show()
         self.ipFrame.text:Show()
         self.ipFrame.text:SetText(count or 0)   
-		self:UpdateSettings() --Hide when count 0
+		self:UpdatedSettings() --Hide when count 0
     end,
     
 ---------------------------------------
