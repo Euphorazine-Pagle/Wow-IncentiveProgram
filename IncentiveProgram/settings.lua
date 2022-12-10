@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r7 | 10/26/2016------
+--------r8 | 10/27/2016------
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -52,8 +52,6 @@ local IncentiveProgramSettings = {
         db.userSettings = db.userSettings or {}
         
         obj.db = db
-		
-		obj.guid = UnitGUID("player")
         
         return obj
     end,
@@ -153,6 +151,9 @@ local IncentiveProgramSettings = {
         if not self.db then return end
         if not self.db.userSettings then self.db.userSettings = {} end
      
+		if not self.guid then self.guid = UnitGUID("player") end
+		if not self.guid then return (defaultSettings[key] or false) end
+	 
         if not self.db.userSettings[self.guid] then self.db.userSettings[self.guid] = {} end
         
         if self.db.userSettings[self.guid][key] == nil then
@@ -177,10 +178,13 @@ local IncentiveProgramSettings = {
         if not key then return end
         if not self.db then return end
         if not self.db.userSettings then self.db.userSettings = {} end
-     
-        if not self.db.userSettings[self.guid] then self.db.userSettings[self.guid] = {} end
-        
-        self.db.userSettings[self.guid][key] = value
+		
+		if not self.guid then self.guid = UnitGUID("player") end
+		if self.guid then
+			if not self.db.userSettings[self.guid] then self.db.userSettings[self.guid] = {} end
+			
+			self.db.userSettings[self.guid][key] = value
+		end
     end
 }
 

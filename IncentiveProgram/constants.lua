@@ -2,13 +2,13 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r7 | 10/26/2016------
+--------r8 | 10/27/2016------
 -----------------------------
 
 local addonName, IncentiveProgram = ...
 
 --Core
-IncentiveProgram.VERSION_NUMBER = 7
+IncentiveProgram.VERSION_NUMBER = 8
 IncentiveProgram.ADDON_DISPLAY_NAME = addonName.." (|cFF69CCF0r"..IncentiveProgram.VERSION_NUMBER.."|r)"
 
 IncentiveProgram.Flair = {
