@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r6 | 10/25/2016------
+--------r7 | 10/26/2016------
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -103,7 +103,10 @@ function eventFrame:OnUpdate(e)
     
     if self.elapsed > IncentiveProgram.TickRate then
         self.elapsed = self.elapsed - IncentiveProgram.TickRate
-        RequestLFDPlayerLockInfo()
+		if ( not IsInGroup() ) then --can't get incentives in a group anyways.  Seems to still trigger
+									--when in LFR dungeons anyways, so ignore it now.
+			RequestLFDPlayerLockInfo()
+		end
     end
 end
 

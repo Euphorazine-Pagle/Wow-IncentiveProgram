@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r6 | 10/25/2016------
+--------r7 | 10/26/2016------
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -86,7 +86,10 @@ local menuData = {
                 ["isNotRadio"] = true,
                 ["arg1"] = IncentiveProgram.ContextMenu["SETTINGS"],
                 ["arg2"] = IncentiveProgram.Settings["HIDE_ALWAYS"],
-                ["keepShownOnClick"] = true
+                ["keepShownOnClick"] = true,
+				["tooltipTitle"] = IncentiveProgram.ADDON_DISPLAY_NAME,
+				["tooltipText"] = IncentiveProgram.ContextLabels["TOOLTIP_HIDE_ALWAYS"],
+				["tooltipOnButton"] = 1
             },
             [3] = {
                 ["text"] = IncentiveProgram.ContextLabels["ALERT"],
@@ -101,6 +104,16 @@ local menuData = {
                 ["arg1"] = IncentiveProgram.ContextMenu["SETTINGS"],
                 ["arg2"] = IncentiveProgram.Settings["ALERT_TOAST"],
                 ["keepShownOnClick"] = true
+            },
+            [5] = {
+                ["text"] = IncentiveProgram.ContextLabels["IGNORE_COMPLETED_LFR"],
+                ["isNotRadio"] = true,
+                ["arg1"] = IncentiveProgram.ContextMenu["SETTINGS"],
+                ["arg2"] = IncentiveProgram.Settings["IGNORE_COMPLETED_LFR"],
+                ["keepShownOnClick"] = true,
+				["tooltipTitle"] = IncentiveProgram.ADDON_DISPLAY_NAME,
+				["tooltipText"] = IncentiveProgram.ContextLabels["TOOLTIP_IGNORE_LFR"],
+				["tooltipOnButton"] = 1
             }
         }
     }

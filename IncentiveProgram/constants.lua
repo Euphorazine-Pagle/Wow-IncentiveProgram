@@ -2,13 +2,13 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r6 | 10/25/2016------
+--------r7 | 10/26/2016------
 -----------------------------
 
 local addonName, IncentiveProgram = ...
 
 --Core
-IncentiveProgram.VERSION_NUMBER = 5
+IncentiveProgram.VERSION_NUMBER = 7
 IncentiveProgram.ADDON_DISPLAY_NAME = addonName.." (|cFF69CCF0r"..IncentiveProgram.VERSION_NUMBER.."|r)"
 
 IncentiveProgram.Flair = {
@@ -27,6 +27,7 @@ IncentiveProgram.Flair = {
     [1287] = "EN1 - ",
     [1288] = "EN2 - ",
     [1289] = "EN3 - ",
+	[1411] = "TV1 - ",
     [1290] = "NH1 - ",
     [1291] = "NH2 - ",
     [1292] = "NH3 - ",
@@ -59,6 +60,7 @@ IncentiveProgram.Settings = {
     ALERT_TOAST = "toastAlert",
     COUNT_EVEN_IF_NOT_SELECTED = "countEvenIfNotSelected",
     COUNT_EVEN_IF_NOT_ROLE_ELIGIBLE = "countEvenIfNotRoleEligible",
+	IGNORE_COMPLETED_LFR = "ignoreCompletedLFR",
     
     ROLE_TANK = "roleTank",
     ROLE_HEALER = "roleHealer",
@@ -107,12 +109,16 @@ IncentiveProgram.ContextLabels = {
     
     SETTINGS = "Settings",
     HIDE_IN_PARTY = "Hide in Party",
-    HIDE_ALWAYS = "Hide Always (Data Brokers)",
+    HIDE_ALWAYS = "Hide Always",
     ALERT = "Alert When New",
     ALERT_TOAST = "Alert With Toast",
+	IGNORE_COMPLETED_LFR = "Ignore Completed LFRs",
     
     IGNORE = "Ignore",
     UNIGNORE = "Unignore",
     
-    JOIN_QUEUE = "Join Queue"
+    JOIN_QUEUE = "Join Queue",
+	
+	TOOLTIP_IGNORE_LFR = "LFRs with all encounters defeated no longer alert or show in count, but still show up in left click menu.",
+	TOOLTIP_HIDE_ALWAYS = "Hide's the frame always.  This is intended for use with Data Brokers.  Type /ip to undo."
 }

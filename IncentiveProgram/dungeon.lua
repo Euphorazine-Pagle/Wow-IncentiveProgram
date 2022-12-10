@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r6 | 10/25/2016------
+--------r7 | 10/26/2016------
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -106,6 +106,35 @@ local function getAlertText(tempKey)
     return returnString
 end
 
+local function sendAlert(dungeonID, tempKey)
+	local flair = IncentiveProgram.Flair[dungeonID] or ""
+	local name = IncentiveProgram:GetSettings():GetDungeonSetting(dungeonID, IncentiveProgram.Settings["DUNGEON_NAME"])
+	local line1 = flair..name
+	
+	local line2 = getAlertText(tempKey) or ""
+
+	local texture = select(11, GetLFGDungeonInfo(dungeonID))
+	if ( texture and texture ~= "" ) then
+		texture = "Interface\\LFGFrame\\UI-LFG-BACKGROUND-"..texture
+	else
+		texture = 348520
+	end
+	
+	local ignoreCompletedLFRs = IncentiveProgram:GetSettings(IncentiveProgram.Settings["IGNORE_COMPLETED_LFR"])
+	
+	if ( ignoreCompletedLFRs ) then
+		local encounterDone, encounterTotal = GetLFGDungeonNumEncounters(dungeonID)
+
+		if ( encounterDone == 0 ) then --Not an LFR, so alert.
+			IncentiveProgram:SetAlert(line1, line2, texture, dungeonID)
+		elseif ( encounterDone ~= encounterTotal ) then --all of the LFRs have not been completed.
+			IncentiveProgram:SetAlert(line1, line2, texture, dungeonID)
+		end
+	else
+		IncentiveProgram:SetAlert(line1, line2, texture, dungeonID)
+	end
+end
+
 ---------------------------------------
 -- Class: Dungeon
 -- This class looks for shortages and returns data revolving around any Dungeon logic.
@@ -167,32 +196,11 @@ local IncentiveProgramDungeon = {
             if ( not self.dungeonIDShortage[key] ) then
                 --Added to shortage list
                 hasAdded = true
-                if ( getAlertText(value) ) then
-                    local texture = select(11, GetLFGDungeonInfo(key))
-                    if ( texture and texture ~= "" ) then
-                        texture = "Interface\\LFGFrame\\UI-LFG-BACKGROUND-"..texture
-                    else
-                        texture = 348520
-                    end
-					local flair = IncentiveProgram.Flair[key] or ""
-					local name = IncentiveProgram:GetSettings():GetDungeonSetting(key, IncentiveProgram.Settings["DUNGEON_NAME"])
-                    IncentiveProgram:SetAlert(flair..name, getAlertText(value), texture, key)
-                end
+                sendAlert(key, value)
             elseif ( value ~= self.dungeonIDShortage[key]) then
                 --Difference in the roles eligble for shortage bonus
                 hasDifference = true
-                
-                if ( getAlertText(value) ) then
-                    local texture = select(11, GetLFGDungeonInfo(key))
-                    if ( texture and texture ~= "" ) then
-                        texture = "Interface\\LFGFrame\\UI-LFG-BACKGROUND-"..texture
-                    else
-                        texture = 348520
-                    end
-					local flair = IncentiveProgram.Flair[key] or ""
-					local name = IncentiveProgram:GetSettings():GetDungeonSetting(key, IncentiveProgram.Settings["DUNGEON_NAME"])
-                    IncentiveProgram:SetAlert(flair..name, getAlertText(value), texture, key)
-                end
+                sendAlert(key, value)
             end
         end
         
@@ -222,6 +230,14 @@ local IncentiveProgramDungeon = {
             
             elseif ( not self:CanQueueForDungeon(key) ) then
             
+			elseif ( IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["IGNORE_COMPLETED_LFR"]) ) then
+				local encounterDone, encounterTotal = GetLFGDungeonNumEncounters(key)
+
+				if ( encounterDone == 0 ) then --Not an LFR, so alert.
+					count = count + 1
+				elseif ( encounterDone ~= encounterTotal ) then --all of the LFRs have not been completed.
+					count = count + 1
+				end
             else
                 count = count + 1
             end

@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r6 | 10/25/2016------
+--------r7 | 10/26/2016------
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -43,12 +43,17 @@ local IncentiveProgramSettings = {
         setmetatable(obj, self)
         self.__index = self
         
-        local db = IncentiveProgramDB or {}
+		
+		IncentiveProgramDB = IncentiveProgramDB or {}
+		
+        local db = IncentiveProgramDB
         db.settings = db.settings or {}
         db.dungeonSettings = db.dungeonSettings or {}
         db.userSettings = db.userSettings or {}
         
         obj.db = db
+		
+		obj.guid = UnitGUID("player")
         
         return obj
     end,
@@ -148,14 +153,13 @@ local IncentiveProgramSettings = {
         if not self.db then return end
         if not self.db.userSettings then self.db.userSettings = {} end
      
-        local guid = UnitGUID("player")
-        if not self.db.userSettings[guid] then self.db.userSettings[guid] = {} end
+        if not self.db.userSettings[self.guid] then self.db.userSettings[self.guid] = {} end
         
-        if self.db.userSettings[guid][key] == nil then
-            self.db.userSettings[guid][key] = defaultSettings[key] or false
+        if self.db.userSettings[self.guid][key] == nil then
+            self.db.userSettings[self.guid][key] = defaultSettings[key] or false
         end
         
-        return self.db.userSettings[guid][key]
+        return self.db.userSettings[self.guid][key]
     end,
     
     
@@ -174,10 +178,9 @@ local IncentiveProgramSettings = {
         if not self.db then return end
         if not self.db.userSettings then self.db.userSettings = {} end
      
-        local guid = UnitGUID("player")
-        if not self.db.userSettings[guid] then self.db.userSettings[guid] = {} end
+        if not self.db.userSettings[self.guid] then self.db.userSettings[self.guid] = {} end
         
-        self.db.userSettings[guid][key] = value
+        self.db.userSettings[self.guid][key] = value
     end
 }
 
