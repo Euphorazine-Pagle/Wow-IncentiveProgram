@@ -120,8 +120,8 @@ local function sendAlert(dungeonID, tempKey)
 		texture = 348520
 	end
 	
-	local ignoreCompletedLFRs = IncentiveProgram:GetSettings(IncentiveProgram.Settings["IGNORE_COMPLETED_LFR"])
-	local ignoreDungeon = IncentiveProgram:GetDungeonSetting(dungeonID, IncentiveProgram.Settings["IGNORE"])
+	local ignoreCompletedLFRs = IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["IGNORE_COMPLETED_LFR"])
+	local ignoreDungeon = IncentiveProgram:GetSettings():GetDungeonSetting(dungeonID, IncentiveProgram.Settings["IGNORE"])
 	
 	if ( ignoreCompletedLFRs ) then
 		local encounterDone, encounterTotal = GetLFGDungeonNumEncounters(dungeonID)
