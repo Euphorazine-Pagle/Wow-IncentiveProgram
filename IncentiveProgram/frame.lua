@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r10 | 01/30/2017-----
+--------r12 | 04/02/2017-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -86,7 +86,6 @@ local IncentiveProgramFrame = {
         ipFrame.text:SetPoint("CENTER", 0, -5)
         ipFrame.text:SetNonSpaceWrap(false)
         
-		print("race ya")
         ipFrame.menu = IncentiveProgram:CreateMenu(ipFrame)
         Lib_UIDropDownMenu_Initialize(ipFrame.menu.frame, ipFrame.menu.MenuOnLoad, "MENU")
         
@@ -134,6 +133,7 @@ local IncentiveProgramFrame = {
         self.ipFrame.leftGradiant:Hide()
         self.ipFrame.rightGradiant:Hide()
         self.ipFrame.text:Hide()
+		self:UpdatedSettings() --Hide when count 0
     end,
     
 ---------------------------------------
@@ -153,7 +153,8 @@ local IncentiveProgramFrame = {
         self.ipFrame.leftGradiant:Show()
         self.ipFrame.rightGradiant:Show()
         self.ipFrame.text:Show()
-        self.ipFrame.text:SetText(count or 0)        
+        self.ipFrame.text:SetText(count or 0)   
+		self:UpdateSettings() --Hide when count 0
     end,
     
 ---------------------------------------
@@ -190,17 +191,18 @@ local IncentiveProgramFrame = {
     UpdatedSettings = function(self)
         local hideAlways = IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["HIDE_ALWAYS"])
         local hideInParty = IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["HIDE_IN_PARTY"])
-        if ( hideAlways ) then
-            self:HideFrame()
-        else
-            self:ShowFrame()
-        end
-        
-        if ( hideInParty and IsInGroup() ) then
-            self:HideFrame()
-        elseif ( not hideAlways ) then
-            self:ShowFrame()
-        end
+		local hideEmpty = IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["HIDE_EMPTY"])
+		
+		if ( hideAlways ) then
+			self:HideFrame()
+		elseif ( hideInParty and IsInGroup() ) then
+			self:HideFrame()
+		elseif ( hideEmpty and IncentiveProgram:GetDungeon():GetCount() == 0 ) then
+			self:HideFrame()
+		else
+			self:ShowFrame()
+		end
+		
     end,
     
 ---------------------------------------

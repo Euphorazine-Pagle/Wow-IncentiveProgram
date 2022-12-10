@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r10 | 01/30/2017-----
+--------r12 | 04/02/2017-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -62,6 +62,7 @@ local function loadSettings(panel)
 	--General Settings
 	panel.generalHideInParty:SetChecked(getSetting(panel.generalHideInParty))
 	panel.generalHideAlways:SetChecked(getSetting(panel.generalHideAlways))
+	panel.generalHideEmpty:SetChecked(getSetting(panel.generalHideEmpty))
 	panel.generalAlert:SetChecked(getSetting(panel.generalAlert))
 	panel.generalAlertToast:SetChecked(getSetting(panel.generalAlertToast))
 	panel.generalIgnoreCompletedLFR:SetChecked(getSetting(panel.generalIgnoreCompletedLFR))
@@ -247,6 +248,9 @@ local function createInterfacePanel()
 	
 	panel.generalHideAlways = createCheckButton(panel, "GeneralHideAlways", IncentiveProgram.ContextLabels["HIDE_ALWAYS"],
 		panel.generalHideInParty, "LEFT", "RIGHT", 100, 0, IncentiveProgram.Settings["HIDE_ALWAYS"], nil, nil, nil)
+	
+	panel.generalHideEmpty = createCheckButton(panel, "GenerlaHideEmpty", IncentiveProgram.ContextLabels["HIDE_EMPTY"],
+		panel.generalHideAlways, "LEFT", "RIGHT", 100, 0, IncentiveProgram.Settings["HIDE_EMPTY"], nil, nil, nil)
 	
 	panel.generalAlert = createCheckButton(panel, "GeneralAlert", IncentiveProgram.ContextLabels["ALERT"],
 		panel.generalHideInParty, "TOPLEFT", "BOTTOMLEFT", 0, 0, IncentiveProgram.Settings["ALERT"], nil, nil, nil)

@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r10 | 01/30/2017-----
+--------r12 | 04/02/2017-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -121,6 +121,7 @@ local function sendAlert(dungeonID, tempKey)
 	end
 	
 	local ignoreCompletedLFRs = IncentiveProgram:GetSettings(IncentiveProgram.Settings["IGNORE_COMPLETED_LFR"])
+	local ignoreDungeon = IncentiveProgram:GetDungeonSetting(dungeonID, IncentiveProgram.Settings["IGNORE"])
 	
 	if ( ignoreCompletedLFRs ) then
 		local encounterDone, encounterTotal = GetLFGDungeonNumEncounters(dungeonID)
@@ -130,7 +131,7 @@ local function sendAlert(dungeonID, tempKey)
 		elseif ( encounterDone ~= encounterTotal ) then --all of the LFRs have not been completed.
 			IncentiveProgram:SetAlert(line1, line2, texture, dungeonID)
 		end
-	else
+	elseif (not ignoreDungeon ) then
 		IncentiveProgram:SetAlert(line1, line2, texture, dungeonID)
 	end
 end
@@ -241,6 +242,23 @@ local IncentiveProgramDungeon = {
             else
                 count = count + 1
             end
+        end
+        
+        return count
+    end,
+	
+---------------------------------------
+-- GetCount gets a count of shortages, counting ignored and ones already queued.
+-- @params
+--      self - Dungeon Class
+-- @returns
+--		count - number of shortages
+--------------------------------------- 
+    GetCount = function(self)
+        local tShortage = self:GetShortage()
+        local count = 0
+        for key, value in pairs(tShortage) do
+            count = count + 1
         end
         
         return count

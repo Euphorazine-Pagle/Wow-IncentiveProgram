@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r10 | 01/30/2017-----
+--------r12 | 04/02/2017-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -56,6 +56,7 @@ IncentiveProgram.Settings = {
     DUNGEON_TYPE = "dungeonType",
     HIDE_IN_PARTY = "hideInParty",
     HIDE_ALWAYS = "hideAlways", --still shows in databroker
+	HIDE_EMPTY = "hideEmpty",
     ALERT = "alert",
     ALERT_TOAST = "toastAlert",
     COUNT_EVEN_IF_NOT_SELECTED = "countEvenIfNotSelected",
@@ -79,7 +80,11 @@ IncentiveProgram.Settings = {
 	TOAST_REPEATS = "toastRepeats",
 	CYCLE_COUNT = "cycleCount",
 	CONTINUOUSLY_CYCLE = "continuouslyCycle",
-	CHANNEL = "channel"
+	CHANNEL = "channel",
+	CHANNEL_SFX = "SFX",
+	CHANNEL_MUSIC = "MUSIC",
+	CHANNEL_AMBIENT = "AMBIENT",
+	CHANNEL_MASTER = "MASTER"
 }
 
 IncentiveProgram.TickRate  = 20
@@ -127,6 +132,7 @@ IncentiveProgram.ContextLabels = {
     SETTINGS = "Settings",
     HIDE_IN_PARTY = "Hide in Party",
     HIDE_ALWAYS = "Hide Always",
+	HIDE_EMPTY = "Hide When Empty",
     ALERT = "Alert When New",
     ALERT_TOAST = "Alert With Toast",
 	IGNORE_COMPLETED_LFR = "Ignore Completed LFRs",

@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r10 | 01/30/2017-----
+--------r12 | 04/02/2017-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -17,6 +17,7 @@ local defaultSettings = {}
     defaultSettings[IncentiveProgram.Settings["IGNORE"]] = false
     defaultSettings[IncentiveProgram.Settings["HIDE_IN_PARTY"]] = true
     defaultSettings[IncentiveProgram.Settings["HIDE_ALWAYS"]] = false
+	defaultSettings[IncentiveProgram.Settings["HIDE_EMPTY"]] = false
     defaultSettings[IncentiveProgram.Settings["ALERT"]] = true
     defaultSettings[IncentiveProgram.Settings["ALERT_TOAST"]] = false
     defaultSettings[IncentiveProgram.Settings["COUNT_EVEN_IF_NOT_SELECTED"]] = false
