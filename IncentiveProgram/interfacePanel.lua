@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r12 | 04/02/2017-----
+--------r16 | 08/30/2017-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -285,7 +285,7 @@ local function createInterfacePanel()
 	panel.soundsAlertTest:SetScript("OnClick", function(self)
 		local soundID = getSetting(panel.soundsAlertSound)
 		local channel = getSetting(panel.soundsChannelDefault)
-		PlaySoundKitID(soundID, channel)
+		PlaySound(soundID, channel)
 	end)
 		
 	panel.soundsAlertRepeatsLabel = panel:CreateFontString(panel:GetName().."SoundAlertRepeatsLabel", "ARTWORK", "GameFontNormalSmall")
@@ -313,7 +313,7 @@ local function createInterfacePanel()
 	panel.soundsToastTest:SetScript("OnClick", function(self)
 		local soundID = getSetting(panel.soundsToastSound)
 		local channel = getSetting(panel.soundsChannelDefault)
-		PlaySoundKitID(soundID, channel)
+		PlaySound(soundID, channel)
 	end)
 		
 	panel.soundsToastRepeatsLabel = panel:CreateFontString(panel:GetName().."SoundToastRepeatsLabel", "ARTWORK", "GameFontNormalSmall")

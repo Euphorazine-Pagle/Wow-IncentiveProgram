@@ -1,8 +1,8 @@
-## Interface: 70200
+## Interface: 70300
 ## Title: Incentive Program
 ## Notes: Notifies when there are LFG Incentives waiting for you.
 ## Author: Xubera
-## Version: r15
+## Version: r16
 ## SavedVariables: IncentiveProgramDB
 
 libs/LibStub.lua

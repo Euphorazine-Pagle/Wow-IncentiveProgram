@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r15 | 06/22/2017-----
+--------r16 | 08/30/2017-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
