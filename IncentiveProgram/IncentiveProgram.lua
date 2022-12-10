@@ -2,10 +2,11 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r1 | 07/16/2016------
+--------r2 | 07/29/2016------
 -----------------------------
 
 local addonName, IncentiveProgram = ...
+local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
 
 local IncentiveProgramFrame = CreateFrame("Button", "IncentiveProgramFrame", UIParent)
 IncentiveProgramFrame:RegisterEvent("ADDON_LOADED")
@@ -31,6 +32,21 @@ IncentiveProgram.Icons = {
     ["CONTEXT_MENU_DIVIDER"] = "Interface\\Common\\UI-TooltipDivider-Transparent",
     ["CONTEXT_MENU_RED_X"] = "Interface\\Common\\VOICECHAT-MUTED"
   }
+  
+IncentiveProgram.Flair = {
+    [849] = "HM1 - ",
+    [850] = "HM2 - ",
+    [851] = "HM3 - ",
+    [847] = "BRF1 - ",
+    [846] = "BRF2 - ",
+    [848] = "BRF3 - ",
+    [823] = "BRF4 - ",
+    [982] = "HC1 - ",
+    [983] = "HC2 - ",
+    [984] = "HC3 - ",
+    [985] = "HC4 - ",
+    [986] = "HC5 - "    
+}
   
 -- Frame constants
 local TICK_RATE = 20;
@@ -58,7 +74,18 @@ local SETTING_IGNORE = "ignore"
 local SETTING_DUNGEON_NAME = "dungeon_name"
 local SETTING_DUNGEON_TYPE = "dungeon_type"
 local SETTING_HIDE_IN_PARTY = "hideInParty"
+local SETTING_HIDE_ALWAYS = "hideAlways" --still shows in data brokers
 local SETTING_ALERT = "alert"
+
+IncentiveProgram.defaultSettings = {
+    queueAsTank = true,
+    queueAsHealer = true,
+    queueAsDamage = true,
+    ignore = false,
+    hideInParty = true,
+    hideAlways = false,
+    alert = true
+}
 
 ---------------------------------------
 -- Variables
@@ -154,7 +181,7 @@ local function menuClick(menuButton, arg1, arg2)
                 IncentiveProgramFrame.elapsed = TICK_RATE - QUEUE_RATE
             end
                     
-            ToggleDropDownMenu(1, nil, IncentiveProgramFrame.menu, IncentiveProgramFrame, 0, 0) --Close context menu and lock until LFGRoles reset
+            ToggleDropDownMenu(1, nil, IncentiveProgramFrame.menu, IncentiveProgramFrame.anchorFrame or IncentiveProgramFrame, 0, 0) --Close context menu and lock until LFGRoles reset
         end
     elseif arg1 == CONTEXT_IGNORE then
         setDungeonSetting(arg2, SETTING_IGNORE, false)
@@ -163,9 +190,15 @@ local function menuClick(menuButton, arg1, arg2)
         setSetting(arg2, menuButton.checked)
         if arg2 == SETTING_HIDE_IN_PARTY then
             if IsInGroup() and menuButton.checked then
-                IncentiveProgramFrame:Hide()
+                IncentiveProgramFrame:HideFrame()
             else
-                IncentiveProgramFrame:Show()
+                IncentiveProgramFrame:ShowFrame()
+            end
+        elseif arg2 == SETTING_HIDE_ALWAYS then
+            if menuButton.checked then
+                IncentiveProgramFrame:HideFrame()
+            else
+                IncentiveProgramFrame:ShowFrame()
             end
         end
     end
@@ -249,6 +282,14 @@ local menuData = {
                 ["keepShownOnClick"] = true
             },
             [2] = {
+                ["text"] = "Hide Always (for Data Brokers)",
+                ["isNotRadio"] = true,
+                ["arg1"] = CONTEXT_SETTINGS,
+                ["arg2"] = SETTING_HIDE_ALWAYS,
+                ["func"] = menuClick,
+                ["keepShownOnClick"] = true
+            },
+            [3] = {
                 ["text"] = "Alert When New",
                 ["isNotRadio"] = true,
                 ["arg1"] = CONTEXT_SETTINGS,
@@ -321,7 +362,7 @@ local function menuOnLoad(self,level)
                         info.arg1 = CONTEXT_QUEUE
                         info.arg2 = CONTEXT_TANK
                         info.value = dungeonID
-                        info.checked = getDungeonSetting(dungeonID, SETTING_QA_TANK, true)
+                        info.checked = getDungeonSetting(dungeonID, SETTING_QA_TANK)
                         info.isNotRadio = true
                         info.func = menuClick
                         info.keepShownOnClick = true
@@ -336,7 +377,7 @@ local function menuOnLoad(self,level)
                         info.arg1 = CONTEXT_QUEUE
                         info.arg2 = CONTEXT_HEALER
                         info.value = dungeonID
-                        info.checked = getDungeonSetting(dungeonID, SETTING_QA_HEALER, true)
+                        info.checked = getDungeonSetting(dungeonID, SETTING_QA_HEALER)
                         info.isNotRadio = true
                         info.func = menuClick
                         info.keepShownOnClick = true
@@ -351,7 +392,7 @@ local function menuOnLoad(self,level)
                         info.arg1 = CONTEXT_QUEUE
                         info.arg2 = CONTEXT_DAMAGE
                         info.value = dungeonID
-                        info.checked = getDungeonSetting(dungeonID, SETTING_QA_DAMAGE, true)
+                        info.checked = getDungeonSetting(dungeonID, SETTING_QA_DAMAGE)
                         info.isNotRadio = true
                         info.func = menuClick
                         info.keepShownOnClick = true
@@ -429,7 +470,7 @@ local function menuOnLoad(self,level)
                         info.checked = select(level2Table[i]["arg2"],GetLFGRoles())
                         info.disabled = not select((level2Table[i]["arg2"]-1), C_LFGList.GetAvailableRoles())
                     elseif level2Table[i]["arg1"] == CONTEXT_SETTINGS then
-                        info.checked = getSetting(level2Table[i]["arg2"], false)
+                        info.checked = getSetting(level2Table[i]["arg2"])
                     end
                     
                     UIDropDownMenu_AddButton(info, level)
@@ -440,10 +481,10 @@ local function menuOnLoad(self,level)
 end
 
 -- gets a setting
-function getSetting(key, default)
+function getSetting(key)
     if not IncentiveProgramDB then return end --called before variables loaded
     if IncentiveProgramDB.settings[key] == nil then
-        IncentiveProgramDB.settings[key] = default
+        IncentiveProgramDB.settings[key] = IncentiveProgram.defaultSettings[key] or false
     end
     
     return IncentiveProgramDB.settings[key]
@@ -456,12 +497,12 @@ function setSetting(key, value)
 end
 
 -- gets a dungeon setting, remembers queue preferences and instance name
-function getDungeonSetting(dungeon, key, default)
+function getDungeonSetting(dungeon, key)
     if not IncentiveProgramDB then return end --called before variables loaded
     IncentiveProgramDB.dungeonSettings[dungeon] = IncentiveProgramDB.dungeonSettings[dungeon] or {}
     
     if IncentiveProgramDB.dungeonSettings[dungeon][key] == nil then
-        IncentiveProgramDB.dungeonSettings[dungeon][key] = default
+        IncentiveProgramDB.dungeonSettings[dungeon][key] = IncentiveProgram.defaultSettings[key] or false
     end
     
     return IncentiveProgramDB.dungeonSettings[dungeon][key]
@@ -553,6 +594,19 @@ function IncentiveProgramFrame:SetupFrame()
             self:OnTick()
         end
     end)
+    
+    --Data Broker
+    self.dataBroker = ldb:NewDataObject("IncentiveProgram", {
+        type = "data source",
+        text = "5",
+        value = "5",
+        label = "Incentive",
+        
+        icon = IncentiveProgram.Icons["INCENTIVE_RARE"],
+        OnClick = function (clickedframe, button, down)
+            IncentiveProgramFrame:OnClick(button, down, clickedframe)
+        end
+    })
 end
 
 ---------------------------------------
@@ -571,6 +625,8 @@ function IncentiveProgramFrame:OnEvent(event,...)
         IncentiveProgramDB = IncentiveProgramDB or {}
         IncentiveProgramDB.settings = IncentiveProgramDB.settings or {}
         IncentiveProgramDB.dungeonSettings = IncentiveProgramDB.dungeonSettings or {}
+        
+        if getSetting(SETTING_HIDE_ALWAYS) then self:HideFrame() end        
     elseif (event == "LFG_UPDATE_RANDOM_INFO") then
         
     elseif event == "LFG_LOCK_INFO_RECEIVED" then
@@ -579,9 +635,9 @@ function IncentiveProgramFrame:OnEvent(event,...)
         self.elapsed = TICK_RATE; --trigger the Tick
     elseif event == "GROUP_ROSTER_UPDATE" then
         if IsInGroup() and getSetting(SETTING_HIDE_IN_PARTY) then
-            self:Hide()
-        else
-            self:Show()
+            self:HideFrame()
+        elseif not getSetting(SETTING_HIDE_ALWAYS) then
+            self:ShowFrame()
         end
     elseif event == "LFG_UPDATE" and IncentiveProgram.dungeonIDShortage then
         local count, shortageType = IncentiveProgram:GetShortageCount(), LFG_ROLE_SHORTAGE_RARE
@@ -607,6 +663,15 @@ function IncentiveProgramFrame:OnTick()
         --print("LfgRolesUpdated")
     end
     
+    if IsInGroup() then -- If we are in a group, all incentives will be 0.  Don't waste time
+                        -- looking for incentives, and don't trigger events to refresh the LFG interface.
+        if getSetting(SETTING_HIDE_IN_PARTY) then
+            self:HideFrame()
+        end
+        self:HideTextures() --set to 0
+        return
+    end
+    
     IncentiveProgram:GetDungeonInfo()
     local shortageType, hasRemoved, hasAdded, hasDifference = IncentiveProgram:GetShortage()
     
@@ -618,7 +683,7 @@ function IncentiveProgramFrame:OnTick()
         self:HideTextures()
     end
     
-    if (getSetting(SETTING_ALERT,true) and hasAdded) then
+    if (getSetting(SETTING_ALERT) and hasAdded) then
         self.AlertCount = NUM_OF_ALERT_CYCLES
         self.elapsed = TICK_RATE - ALERT_RATE
     end
@@ -643,19 +708,21 @@ end
 ---------------------------------------
 -- OnClick Event
 ---------------------------------------
-function IncentiveProgramFrame:OnClick(button, down)
+function IncentiveProgramFrame:OnClick(button, down, anchorFrame)
     self.menu.button = button
+    anchorFrame = anchorFrame or self
+    self.anchorFrame = anchorFrame
     
     if button == "LeftButton" and not IncentiveProgram.SavedLFGRoles.isUpdated then
         self.menu.point = "BOTTOMLEFT"
-        self.menu.relativeTo = self
+        self.menu.relativeTo = anchorFrame
         self.menu.relativePoint = "TOPRIGHT"
-        ToggleDropDownMenu(1, nil, self.menu, self, 0, 0)    
+        ToggleDropDownMenu(1, nil, self.menu, anchorFrame, 0, 0)    
     elseif button == "RightButton" then
         self.menu.point = "BOTTOMLEFT"
-        self.menu.relativeTo = self
+        self.menu.relativeTo = anchorFrame
         self.menu.relativePoint = "TOPRIGHT"
-        ToggleDropDownMenu(1, nil, self.menu, self, 0, 0)
+        ToggleDropDownMenu(1, nil, self.menu, anchorFrame, 0, 0)
     end
 end
 
@@ -681,16 +748,39 @@ function IncentiveProgramFrame:ShowTextures(count, shortageType)
     self.text:Show()
     
     self.text:SetText(count)
+    self.dataBroker.text = count
     
     if shortageType == LFG_ROLE_SHORTAGE_RARE then
         self.tex:SetTexture(IncentiveProgram.Icons["INCENTIVE_RARE"])
+        self.dataBroker.icon = IncentiveProgram.Icons["INCENTIVE_RARE"]
     elseif shortageType == LFG_ROLE_SHORTAGE_UNCOMMON then
         self.tex:SetTexture(IncentiveProgram.Icons["INCENTIVE_UNCOMMON"])
+        self.dataBroker.icon = IncentiveProgram.Icons["INCENTIVE_UNCOMMON"]
     elseif shortageType == LFG_ROLE_SHORTAGE_PLENTIFUL then
         self.tex:SetTexture(IncentiveProgram.Icons["INCENTIVE_PLENTIFUL"])
+        self.dataBroker.icon = IncentiveProgram.Icons["INCENTIVE_PLENTIFUL"]
     else
         self.tex:SetTexture(IncentiveProgram.Icons["INCENTIVE_NONE"])
+        self.dataBroker.icon = IncentiveProgram.Icons["INCENTIVE_NONE"]
     end
+end
+
+---------------------------------------
+-- ShowFrame just sets the alpha and mouse interaction to 100.  We don't use :Hide()
+-- or :Show() because that cancels the OnUpdate() functio when hidden.
+---------------------------------------
+function IncentiveProgramFrame:ShowFrame()
+    self:SetAlpha(100)
+    self:EnableMouse(true)
+end
+
+---------------------------------------
+-- HideFrame just sets the alpha and mouse interaction to 0, this way the OnUpdate
+-- function still calls.  It will continue to look for incentives
+---------------------------------------
+function IncentiveProgramFrame:HideFrame()
+    self:SetAlpha(0)
+    self:EnableMouse(false)
 end
 
 
@@ -759,7 +849,8 @@ function IncentiveProgram:CreateMenuItemDungeon(i, dungeonType, info)
         end
         
         if IncentiveProgram:IsShortage(id) then
-            info.text = getDungeonSetting(id, SETTING_DUNGEON_NAME)
+            local flair = IncentiveProgram.Flair[id] or ""
+            info.text = flair..getDungeonSetting(id, SETTING_DUNGEON_NAME)
             info.value = id
             info.notCheckable = true
             
