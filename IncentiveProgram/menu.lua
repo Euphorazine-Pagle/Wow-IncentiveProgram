@@ -2,10 +2,13 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
+-----------Grubsey-----------
 --------r16 | 08/30/2017-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
+
+local LibDD = LibStub:GetLibrary("LibUIDropDownMenu-4.0")
 
 --Local copy of the class
 local menu
@@ -133,14 +136,14 @@ local menuData = {
 --		nil
 ---------------------------------------   
 local function createTitleInfo(level)
-    local info = Lib_UIDropDownMenu_CreateInfo()
+    local info = LibDD:UIDropDownMenu_CreateInfo()
     
     --Add title
     info.text = IncentiveProgram.ADDON_DISPLAY_NAME
     info.isTitle = true
     info.notCheckable = true
     
-    Lib_UIDropDownMenu_AddButton(info, level)
+    LibDD:UIDropDownMenu_AddButton(info, level)
 end
 
 ---------------------------------------
@@ -155,16 +158,16 @@ end
 local function createSettingsMenu(level, level2Table)
     if ( level == 1 ) then
         for i=1, #menuData do
-            local info = Lib_UIDropDownMenu_CreateInfo();
+            local info = LibDD:UIDropDownMenu_CreateInfo();
             for key,value in pairs(menuData[i]) do
                 info[key] = value
             end
             info.func = menu.MenuOnClick
-            Lib_UIDropDownMenu_AddButton(info, level)
+            LibDD:UIDropDownMenu_AddButton(info, level)
         end
     elseif ( level == 2 ) then
         for i=1, #level2Table do
-            local info = Lib_UIDropDownMenu_CreateInfo();
+            local info = LibDD:UIDropDownMenu_CreateInfo();
             for key,value in pairs(level2Table[i]) do
                 info[key] = value
             end
@@ -175,7 +178,7 @@ local function createSettingsMenu(level, level2Table)
             end
             
             info.func = menu.MenuOnClick
-            Lib_UIDropDownMenu_AddButton(info, level)
+            LibDD:UIDropDownMenu_AddButton(info, level)
         end
     end
 end
@@ -192,7 +195,7 @@ local function createSettingsIgnoreList(level)
     local count = 0
     for key, value in pairs (IncentiveProgram:GetSettings().db.dungeonSettings) do
         if ( IncentiveProgram:GetSettings():GetDungeonSetting(key, IncentiveProgram.Settings["IGNORE"]) ) then
-            local info = Lib_UIDropDownMenu_CreateInfo()
+            local info = LibDD:UIDropDownMenu_CreateInfo()
             info.text = value[IncentiveProgram.Settings["DUNGEON_NAME"]]
             info.notCheckable = true
             info.func = menu.MenuOnClick
@@ -202,19 +205,19 @@ local function createSettingsIgnoreList(level)
             info.icon = IncentiveProgram.Icons["CONTEXT_MENU_RED_X"]
             info.padding = 8
             
-            Lib_UIDropDownMenu_AddButton(info, level)
+            LibDD:UIDropDownMenu_AddButton(info, level)
             count = count + 1
             if ( count >= 10 ) then break end
         end
     end
     
     if ( count == 0 ) then
-        local info = Lib_UIDropDownMenu_CreateInfo()
+        local info = LibDD:UIDropDownMenu_CreateInfo()
         info.text = IncentiveProgram.ContextLabels["NO_IGNORED"]
         info.notCheckable = true
         info.disabled = true
         
-        Lib_UIDropDownMenu_AddButton(info, level)
+        LibDD:UIDropDownMenu_AddButton(info, level)
     end
 end
 
@@ -230,7 +233,7 @@ end
 --		nil
 ---------------------------------------   
 local function createDungeonEntry(dungeonID, name, level, isShortage, showAll)
-    local info = Lib_UIDropDownMenu_CreateInfo()
+    local info = LibDD:UIDropDownMenu_CreateInfo()
     local isAvailble, isAvaibleToPlayer = IsLFGDungeonJoinable(dungeonID)
 
     if not ( isAvailble and isAvaibleToPlayer ) then
@@ -265,11 +268,11 @@ local function createDungeonEntry(dungeonID, name, level, isShortage, showAll)
     --Color gray if not in the shortage list but still showing all.
     if ( not isShortage and showAll ) then
         info.colorCode = "|cFF666666"
-        Lib_UIDropDownMenu_AddButton(info, level)
+        LibDD:UIDropDownMenu_AddButton(info, level)
 	elseif ( ignored and showAll ) then
-        Lib_UIDropDownMenu_AddButton(info, level)
+        LibDD:UIDropDownMenu_AddButton(info, level)
     elseif ( isShortage and not ignored ) then
-        Lib_UIDropDownMenu_AddButton(info, level)
+        LibDD:UIDropDownMenu_AddButton(info, level)
     end  
 end
 
@@ -283,7 +286,7 @@ end
 --		nil
 ---------------------------------------   
 local function createIgnoreButton(dungeonID, level)
-    local info = Lib_UIDropDownMenu_CreateInfo()
+    local info = LibDD:UIDropDownMenu_CreateInfo()
     
     if ( IncentiveProgram:GetSettings():GetDungeonSetting(dungeonID, IncentiveProgram.Settings["IGNORE"]) ) then
         info.text = IncentiveProgram.ContextLabels["UNIGNORE"]
@@ -296,7 +299,7 @@ local function createIgnoreButton(dungeonID, level)
     info.value = dungeonID
     info.func = menu.MenuOnClick
     info.notCheckable = true
-    Lib_UIDropDownMenu_AddButton(info, level)
+    LibDD:UIDropDownMenu_AddButton(info, level)
 end
 
 ---------------------------------------
@@ -315,7 +318,7 @@ local function createRoleButtons(dungeonID, level, showAll)
     
     --Tank
     if ( tank and ( shortageTank or showAll ) ) then
-        local info = Lib_UIDropDownMenu_CreateInfo()
+        local info = LibDD:UIDropDownMenu_CreateInfo()
         info.text = IncentiveProgram.ContextLabels["TANK"]
         info.arg1 = IncentiveProgram.ContextMenu["QUEUE"]
         info.arg2 = IncentiveProgram.Settings["QA_TANK"]
@@ -329,12 +332,12 @@ local function createRoleButtons(dungeonID, level, showAll)
             info.colorCode = "|CFF666666"
         end
         
-        Lib_UIDropDownMenu_AddButton(info, level)
+        LibDD:UIDropDownMenu_AddButton(info, level)
     end
     
     --Healer
     if ( healer and ( shortageHealer or showAll ) ) then
-        local info = Lib_UIDropDownMenu_CreateInfo()
+        local info = LibDD:UIDropDownMenu_CreateInfo()
         info.text = IncentiveProgram.ContextLabels["HEALER"]
         info.arg1 = IncentiveProgram.ContextMenu["QUEUE"]
         info.arg2 = IncentiveProgram.Settings["QA_HEALER"]
@@ -348,12 +351,12 @@ local function createRoleButtons(dungeonID, level, showAll)
             info.colorCode = "|CFF666666"
         end
         
-        Lib_UIDropDownMenu_AddButton(info, level)
+        LibDD:UIDropDownMenu_AddButton(info, level)
     end
     
     --Damage
     if ( damage and ( shortageDamage or showAll ) ) then
-        local info = Lib_UIDropDownMenu_CreateInfo()
+        local info = LibDD:UIDropDownMenu_CreateInfo()
         info.text = IncentiveProgram.ContextLabels["DAMAGE"]
         info.arg1 = IncentiveProgram.ContextMenu["QUEUE"]
         info.arg2 = IncentiveProgram.Settings["QA_DAMAGE"]
@@ -367,7 +370,7 @@ local function createRoleButtons(dungeonID, level, showAll)
             info.colorCode = "|CFF666666"
         end
         
-        Lib_UIDropDownMenu_AddButton(info, level)
+        LibDD:UIDropDownMenu_AddButton(info, level)
     end
         
 end
@@ -381,7 +384,7 @@ end
 --		nil
 ---------------------------------------   
 local function createJoinButton(dungeonID, level)
-    local info = Lib_UIDropDownMenu_CreateInfo()
+    local info = LibDD:UIDropDownMenu_CreateInfo()
     info.text = IncentiveProgram.ContextLabels["JOIN_QUEUE"]
     info.arg1 = IncentiveProgram.ContextMenu["QUEUE"]
     info.arg2 = IncentiveProgram.ContextMenu["JOIN"]
@@ -398,7 +401,7 @@ local function createJoinButton(dungeonID, level)
         info.disabled = true
     end
     
-    Lib_UIDropDownMenu_AddButton(info, level)
+    LibDD:UIDropDownMenu_AddButton(info, level)
 end
 
 ---------------------------------------
@@ -411,8 +414,8 @@ local IncentiveProgramMenu = {
         local obj = {}
         setmetatable(obj, self)
         self.__index = self
-    
-        local frame = CreateFrame("Frame", "IncentiveProgramFrameMenu", parent, "Lib_UIDropDownMenuTemplate", 1)
+
+        local frame = LibDD:Create_UIDropDownMenu("IncentiveProgramFrameMenu", parent_frame)
         obj.frame = frame
         return obj
     end,
@@ -447,7 +450,7 @@ local IncentiveProgramMenu = {
                     end
                 end
             elseif ( level == 2 ) then
-                local dungeonID = LIB_UIDROPDOWNMENU_MENU_VALUE
+                local dungeonID = L_UIDROPDOWNMENU_MENU_VALUE
                 local showAll = IsShiftKeyDown()
                 
                 createIgnoreButton(dungeonID, level)
@@ -459,7 +462,7 @@ local IncentiveProgramMenu = {
                 createTitleInfo(level)
                 createSettingsMenu(level)
             elseif ( level == 2 ) then
-                local level2Table = LIB_UIDROPDOWNMENU_MENU_VALUE
+                local level2Table = L_UIDROPDOWNMENU_MENU_VALUE
                 if ( level2Table == IncentiveProgram.ContextMenu["IGNORE"] ) then
                     createSettingsIgnoreList(level)
                 else
@@ -500,7 +503,7 @@ local IncentiveProgramMenu = {
             IncentiveProgram:GetFrame():UpdatedSettings() --In case new settings now hide frame
             
         elseif ( arg1 == IncentiveProgram.ContextMenu["QUEUE"] ) then
-            local dungeonID = LIB_UIDROPDOWNMENU_MENU_VALUE
+            local dungeonID = L_UIDROPDOWNMENU_MENU_VALUE
             if ( arg2 == IncentiveProgram.Settings["IGNORE"] ) then
                 local ignoreSetting = IncentiveProgram:GetSettings():GetDungeonSetting(dungeonID, arg2)
                 IncentiveProgram:GetSettings():SetDungeonSetting(dungeonID, arg2, not ignoreSetting)
@@ -564,7 +567,8 @@ local IncentiveProgramMenu = {
         end
         
         if ( fromDropDownMenu ) then
-            Lib_ToggleDropDownMenu(1, nil, IncentiveProgram:GetFrame():GetUIMenuFrame(), IncentiveProgram:GetFrame():GetAnchorFrame() or IncentiveProgram:GetFrame():GetUIFrame(), 0, 0) --Close context menu and lock until LFGRoles reset
+             --Close context menu and lock until LFGRoles reset
+            LibDD:ToggleDropDownMenu(1, nil, IncentiveProgram:GetFrame():GetUIMenuFrame(), IncentiveProgram:GetFrame():GetAnchorFrame() or IncentiveProgram:GetFrame():GetUIFrame(), 0, 0)
         end
     end
 }

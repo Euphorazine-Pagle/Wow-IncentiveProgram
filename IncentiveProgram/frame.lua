@@ -2,10 +2,13 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
+-----------Grubsey-----------
 --------r16 | 08/30/2017-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
+
+local LibDD = LibStub:GetLibrary("LibUIDropDownMenu-4.0")
 
 --Local copy of the class
 local frame
@@ -87,7 +90,7 @@ local IncentiveProgramFrame = {
         ipFrame.text:SetNonSpaceWrap(false)
         
         ipFrame.menu = IncentiveProgram:CreateMenu(ipFrame)
-        Lib_UIDropDownMenu_Initialize(ipFrame.menu.frame, ipFrame.menu.MenuOnLoad, "MENU")
+        LibDD:UIDropDownMenu_Initialize(ipFrame.menu.frame, ipFrame.menu.MenuOnLoad, "MENU")
         
         self.ipFrame = ipFrame
     end,
@@ -112,12 +115,12 @@ local IncentiveProgramFrame = {
             self:GetUIMenuFrame().point = "BOTTOMLEFT"
             self:GetUIMenuFrame().relativeTo = anchorFrame
             self:GetUIMenuFrame().relativePoint = "TOPRIGHT"
-            Lib_ToggleDropDownMenu(1, nil, self:GetUIMenuFrame(), anchorFrame, 0, 0)
+            LibDD:ToggleDropDownMenu(1, nil, self:GetUIMenuFrame(), anchorFrame, 0, 0)
         elseif ( button == "RightButton" ) then
             self:GetUIMenuFrame().point = "BOTTOMLEFT"
             self:GetUIMenuFrame().relativeTo = anchorFrame
             self:GetUIMenuFrame().relativePoint = "TOPRIGHT"
-            Lib_ToggleDropDownMenu(1, nil, self:GetUIMenuFrame(), anchorFrame, 0, 0)
+            LibDD:ToggleDropDownMenu(1, nil, self:GetUIMenuFrame(), anchorFrame, 0, 0)
         end
     end,
     
