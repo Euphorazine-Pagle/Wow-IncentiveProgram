@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r5 | 10/24/2016------
+--------r6 | 10/25/2016------
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -174,7 +174,9 @@ local IncentiveProgramDungeon = {
                     else
                         texture = 348520
                     end
-                    IncentiveProgram:SetAlert(IncentiveProgram:GetSettings():GetDungeonSetting(key, IncentiveProgram.Settings["DUNGEON_NAME"]), getAlertText(value), texture, key)
+					local flair = IncentiveProgram.Flair[key] or ""
+					local name = IncentiveProgram:GetSettings():GetDungeonSetting(key, IncentiveProgram.Settings["DUNGEON_NAME"])
+                    IncentiveProgram:SetAlert(flair..name, getAlertText(value), texture, key)
                 end
             elseif ( value ~= self.dungeonIDShortage[key]) then
                 --Difference in the roles eligble for shortage bonus
@@ -187,7 +189,9 @@ local IncentiveProgramDungeon = {
                     else
                         texture = 348520
                     end
-                    IncentiveProgram:SetAlert(IncentiveProgram:GetSettings():GetDungeonSetting(key, IncentiveProgram.Settings["DUNGEON_NAME"]), getAlertText(value), texture, key)
+					local flair = IncentiveProgram.Flair[key] or ""
+					local name = IncentiveProgram:GetSettings():GetDungeonSetting(key, IncentiveProgram.Settings["DUNGEON_NAME"])
+                    IncentiveProgram:SetAlert(flair..name, getAlertText(value), texture, key)
                 end
             end
         end
