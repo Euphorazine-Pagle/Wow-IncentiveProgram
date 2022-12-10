@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r9 | 11/02/2016------
+--------r10 | 01/30/2017-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -238,6 +238,12 @@ local function createDungeonEntry(dungeonID, name, level, isShortage, showAll)
     else
         info.hasArrow = true
     end
+
+	local encounterDone, encounterTotal = GetLFGDungeonNumEncounters(dungeonID)
+	local lfrCompleted = ( encounterDone == encounterTotal )
+	if lfrCompleted and encounterDone > 0 then
+		info.colorCode = "|cFF33FF44"
+	end
     
     --Color red if ignored but showing all anyways
 	local ignored = IncentiveProgram:GetSettings():GetDungeonSetting(dungeonID, IncentiveProgram.Settings["IGNORE"])
