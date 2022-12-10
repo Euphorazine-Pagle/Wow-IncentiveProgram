@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r3 | 07/31/2016------
+--------r4 | 09/20/2016------
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -47,6 +47,9 @@ IncentiveProgram.Flair = {
     [985] = "HC4 - ",
     [986] = "HC5 - "    
 }
+-- String Constants
+local VERSION_NUMBER = 4
+local ADDON_DISPLAY_NAME = addonName.." (|cFF69CCF0r"..VERSION_NUMBER.."|r)"
   
 -- Frame constants
 local TICK_RATE = 20;
@@ -209,7 +212,7 @@ end
 local menuData = {
     [1] = {
         ["isTitle"] = true,
-        ["text"] = "Incentive Program",
+        ["text"] = ADDON_DISPLAY_NAME,
         ["notCheckable"] = true
     },
     
@@ -310,7 +313,7 @@ local function menuOnLoad(self,level)
             local info = UIDropDownMenu_CreateInfo()
             
             --Add Title to Left Click Menu
-            info.text = "Incentive Program"
+            info.text = ADDON_DISPLAY_NAME
             info.isTitle = true
             info.notCheckable = true
             
@@ -737,6 +740,7 @@ function IncentiveProgramFrame:HideTextures()
     
     self.text:Hide()
     self.dataBroker.text = 0
+    self.dataBroker.value = 0 --some DB use text, some use value
     
     self.tex:SetTexture(IncentiveProgram.Icons["INCENTIVE_NONE"])
     self.dataBroker.icon = IncentiveProgram.Icons["INCENTIVE_NONE"]
@@ -755,6 +759,7 @@ function IncentiveProgramFrame:ShowTextures(count, shortageType)
     
     self.text:SetText(count)
     self.dataBroker.text = count
+    self.dataBroker.value = count --some DB use text, some use value
     
     if shortageType == LFG_ROLE_SHORTAGE_RARE then
         self.tex:SetTexture(IncentiveProgram.Icons["INCENTIVE_RARE"])
@@ -789,7 +794,13 @@ function IncentiveProgramFrame:HideFrame()
     self:EnableMouse(false)
 end
 
-
+---------------------------------------
+-- IsShortage checks to see if the dungeon is eligble for incentive loot
+-- @params
+--      id - ID of the dungeon or raid
+-- @returns
+--      boolean - is shortage?
+---------------------------------------
 function IncentiveProgram:IsShortage(id)
     for i=1, LFG_ROLE_NUM_SHORTAGE_TYPES do
         local eligible, forTank, forHealer, forDamage, itemCount, money, xp = GetLFGRoleShortageRewards(id, i);
