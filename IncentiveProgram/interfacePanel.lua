@@ -3,6 +3,7 @@
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
 -----------Grubsey-----------
+-------------Syl-------------
 --------r16 | 08/30/2017-----
 -----------------------------
 
@@ -21,7 +22,7 @@ local function setSetting(element, value)
 	
 	IncentiveProgram:GetFrame():UpdatedSettings()
 	IncentiveProgram:SetCount(IncentiveProgram:GetDungeon():GetShortageCount()) --Refresh Count
-	InterfaceOptionsOptionsFrame_RefreshAddOns()
+	-- InterfaceOptionsOptionsFrame_RefreshAddOns() -- Comment out for Dragonflight Changes - Thanks to kaygil on CurseForge
 end
 
 local function getSetting(element)
@@ -363,7 +364,7 @@ local function createInterfacePanel()
 	end)
 	
 	--Tell Bliz's interface frame to update and show the interface panel
-    InterfaceAddOnsList_Update();
+    -- InterfaceAddOnsList_Update(); -- Comment out for Dragonflight Changes - Thanks to kaygil on CurseForge
 	
 	--test
 	--InterfaceOptionsFrame_OpenToCategory(IncentiveProgramInterfacePanel) 

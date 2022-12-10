@@ -3,6 +3,7 @@
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
 -----------Grubsey-----------
+-------------Syl-------------
 --------r16 | 08/30/2017-----
 -----------------------------
 
@@ -72,14 +73,14 @@ local IncentiveProgramFrame = {
         ipFrame.leftGradiant:SetHeight(14)
         ipFrame.leftGradiant:SetPoint("LEFT", 0, -5)
         ipFrame.leftGradiant:SetTexture(1,0,0,1)
-        ipFrame.leftGradiant:SetGradientAlpha("Horizontal", 0, 0, 0, 0.2, 0, 0, 0, 1)
+        ipFrame.leftGradiant:SetGradient("Horizontal", CreateColor(0, 0, 0, 0.2), CreateColor(0, 0, 0, 1))
         
         ipFrame.rightGradiant = ipFrame:CreateTexture(nil, "BORDER")
         ipFrame.rightGradiant:SetWidth(16)
         ipFrame.rightGradiant:SetHeight(14)
         ipFrame.rightGradiant:SetPoint("RIGHT", 0, -5)
         ipFrame.rightGradiant:SetTexture(1,0,0,1)
-        ipFrame.rightGradiant:SetGradientAlpha("Horizontal", 0, 0, 0, 1, 0, 0, 0, 0.2)
+        ipFrame.rightGradiant:SetGradient("Horizontal", CreateColor(0, 0, 0, 1), CreateColor(0, 0, 0, 0.2))
         
         ipFrame.text = ipFrame:CreateFontString(nil, "ARTWORK", "GameFontWhite")
         ipFrame.text:SetJustifyH("CENTER")

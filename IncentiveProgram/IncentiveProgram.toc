@@ -1,4 +1,4 @@
-## Interface: 90005
+## Interface: 100002
 ## Title: Incentive Program
 ## Notes: Notifies when there are LFG Incentives waiting for you.
 ## Author: Xubera, Grubsey
