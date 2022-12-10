@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r2 | 07/29/2016------
+--------r3 | 07/31/2016------
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -105,7 +105,8 @@ IncentiveProgram.SavedLFGRoles = {
 SLASH_INCENTIVEPROGRAM1 = "/ip"
 function SlashCmdList.INCENTIVEPROGRAM(msg, editbox)
     setSetting(SETTING_HIDE_IN_PARTY, false)
-    IncentiveProgramFrame:Show()
+    setSetting(SETTING_HIDE_ALWAYS, false)
+    IncentiveProgramFrame:ShowFrame()
     IncentiveProgramFrame:ClearAllPoints()
     IncentiveProgramFrame:SetPoint("CENTER",UIParent,"CENTER")
 end
@@ -563,8 +564,6 @@ function IncentiveProgramFrame:SetupFrame()
     self.text:SetPoint("CENTER", 0, -5)
     self.text:SetNonSpaceWrap(false)
     
-    IncentiveProgramFrame:HideTextures()
-    
     self.menu = CreateFrame("Frame","IncentiveProgramFrameMenu", self, "UIDropDownMenuTemplate", 1)
     self.menuOnLoad = menuOnLoad
     UIDropDownMenu_Initialize(self.menu, self.menuOnLoad, "MENU")
@@ -628,7 +627,7 @@ function IncentiveProgramFrame:OnEvent(event,...)
         
         if getSetting(SETTING_HIDE_ALWAYS) then self:HideFrame() end        
     elseif (event == "LFG_UPDATE_RANDOM_INFO") then
-        
+    
     elseif event == "LFG_LOCK_INFO_RECEIVED" then
     
     elseif event == "LFG_ROLE_UPDATE" then
@@ -639,6 +638,7 @@ function IncentiveProgramFrame:OnEvent(event,...)
         elseif not getSetting(SETTING_HIDE_ALWAYS) then
             self:ShowFrame()
         end
+        self.elapsed = TICK_RATE; --trigger the Tick
     elseif event == "LFG_UPDATE" and IncentiveProgram.dungeonIDShortage then
         local count, shortageType = IncentiveProgram:GetShortageCount(), LFG_ROLE_SHORTAGE_RARE
         if count > 0 then
@@ -646,6 +646,8 @@ function IncentiveProgramFrame:OnEvent(event,...)
         else
             self:HideTextures()
         end
+        
+        self.elapsed = TICK_RATE; --trigger the Tick
     else
         --print("Event",event,...)
     end
@@ -732,8 +734,12 @@ end
 function IncentiveProgramFrame:HideTextures()
     self.leftGradiant:Hide()
     self.rightGradiant:Hide()
+    
     self.text:Hide()
+    self.dataBroker.text = 0
+    
     self.tex:SetTexture(IncentiveProgram.Icons["INCENTIVE_NONE"])
+    self.dataBroker.icon = IncentiveProgram.Icons["INCENTIVE_NONE"]
 end
 
 ---------------------------------------
