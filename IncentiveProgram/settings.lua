@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r8 | 10/27/2016------
+--------r9 | 11/02/2016------
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -31,6 +31,15 @@ local defaultSettings = {}
     
     defaultSettings[IncentiveProgram.Settings["FRAME_TOP"]] = -1
     defaultSettings[IncentiveProgram.Settings["TOAST_TOP"]] = -1
+	
+	defaultSettings[IncentiveProgram.Settings["ALERT_PING"]] = true
+	defaultSettings[IncentiveProgram.Settings["ALERT_SOUND"]] = 47615
+	defaultSettings[IncentiveProgram.Settings["ALERT_REPEATS"]] = 3
+	defaultSettings[IncentiveProgram.Settings["TOAST_PING"]] = true
+	defaultSettings[IncentiveProgram.Settings["TOAST_SOUND"]] = 18019
+	defaultSettings[IncentiveProgram.Settings["TOAST_REPEATS"]] = 1
+	defaultSettings[IncentiveProgram.Settings["CYCLE_COUNT"]] = 2
+	defaultSettings[IncentiveProgram.Settings["CONTINUOUSLY_CYCLE"]] = false
 
 
 ---------------------------------------
@@ -198,6 +207,7 @@ local IncentiveProgramSettings = {
 function IncentiveProgram:GetSettings()
     if not settings then
         settings = IncentiveProgramSettings:new()
+		IncentiveProgram.CreateInterfacePanel() --Settings are now loaded, load up the Interface Panel
     end
     
     return settings

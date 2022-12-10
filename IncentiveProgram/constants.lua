@@ -2,14 +2,14 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r8 | 10/27/2016------
+--------r9 | 11/02/2016------
 -----------------------------
 
 local addonName, IncentiveProgram = ...
 
 --Core
-IncentiveProgram.VERSION_NUMBER = 8
-IncentiveProgram.ADDON_DISPLAY_NAME = addonName.." (|cFF69CCF0r"..IncentiveProgram.VERSION_NUMBER.."|r)"
+IncentiveProgram.VERSION_NUMBER = GetAddOnMetadata(addonName, "Version") 
+IncentiveProgram.ADDON_DISPLAY_NAME = addonName.." (|cFF69CCF0"..IncentiveProgram.VERSION_NUMBER.."|r)"
 
 IncentiveProgram.Flair = {
     [849] = "HM1 - ",
@@ -69,10 +69,24 @@ IncentiveProgram.Settings = {
     FRAME_TOP = "frameTop",
     FRAME_LEFT = "frameLeft",
     TOAST_TOP = "toastTop",
-    TOAST_LEFT = "toastLeft"
+    TOAST_LEFT = "toastLeft",
+	
+	ALERT_PING = "alertPing",
+	ALERT_SOUND = "alertSound",
+	ALERT_REPEATS = "alertRepeats",
+	TOAST_PING = "toastPing",
+	TOAST_SOUND = "toastSound",
+	TOAST_REPEATS = "toastRepeats",
+	CYCLE_COUNT = "cycleCount",
+	CONTINUOUSLY_CYCLE = "continuouslyCycle"
 }
 
-IncentiveProgram.TickRate = 20
+IncentiveProgram.TickRate  = 20
+IncentiveProgram.SoundRate = 1
+IncentiveProgram.CycleRate = 1.5
+
+IncentiveProgram.ALERT = 1
+IncentiveProgram.TOAST = 2
 
 --Dungeon Constants
 IncentiveProgram.DUNGEON_REMOVED = 1
@@ -95,7 +109,9 @@ IncentiveProgram.ContextMenu = {
     SETTINGS = "settings",
     
     QUEUE = "queue",
-    JOIN = "join"
+    JOIN = "join",
+	
+	INTERFACE_PANEL = "interfacePanel"
 }
 
 IncentiveProgram.ContextLabels = {
@@ -113,6 +129,7 @@ IncentiveProgram.ContextLabels = {
     ALERT = "Alert When New",
     ALERT_TOAST = "Alert With Toast",
 	IGNORE_COMPLETED_LFR = "Ignore Completed LFRs",
+	INTERFACE_PANEL = "Interface Panel",
     
     IGNORE = "Ignore",
     UNIGNORE = "Unignore",
@@ -120,5 +137,20 @@ IncentiveProgram.ContextLabels = {
     JOIN_QUEUE = "Join Queue",
 	
 	TOOLTIP_IGNORE_LFR = "LFRs with all encounters defeated no longer alert or show in count, but still show up in left click menu.",
-	TOOLTIP_HIDE_ALWAYS = "Hide's the frame always.  This is intended for use with Data Brokers.  Type /ip to undo."
+	TOOLTIP_HIDE_ALWAYS = "Hide's the frame always.  This is intended for use with Data Brokers.  Type /ip to undo.",
+	TOOLTIP_SOUND_ID_1 = "You can find Sound IDs at http://www.wowhead.com/sounds. When you find a sound, the ID is in the address bar (i.e. http://www.wowhead.com/sound=47615/ui-groupfinderreceiveapplication)",
+	TOOLTIP_SOUND_ID_2 = "You can find Sound IDs at http://www.wowhead.com/sounds. When you find a sound, the ID is in the address bar (i.e. http://www.wowhead.com/sound=18019/ui-bnettoast)",
+	TOOLTIP_SOUND_REPEATS = "Number of times the sound effect plays.",
+	TOOLTIP_CYCLE_COUNT = "Number of times the three coin images rotate when a new alert appears.",
+	TOOLTIP_CONTINUOUSLY_CYCLE = "The frame will continuously cycle the coin images while an alert is active.",
+	
+	SOUNDS = "Sounds",
+	SOUND_ID = "Sound ID",
+	REPEATS = "Repeats",
+	ALERT_PING = "Alert Ping",
+	TOAST_PING = "Toast Ping",
+	TEST = "Test",
+	
+	ANIM_CYCLES = "Cycles",
+	CONTINUOUSLY_CYCLE = "Continuously Cycle"
 }

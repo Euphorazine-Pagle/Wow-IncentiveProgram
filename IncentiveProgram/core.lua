@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r8 | 10/27/2016------
+--------r9 | 11/02/2016------
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -29,9 +29,10 @@ IncentiveProgram.SavedLFGRoles = {
 
 SLASH_INCENTIVEPROGRAM1 = "/ip"
 function SlashCmdList.INCENTIVEPROGRAM(msg, editbox)
-    IncentiveProgram:GetSettings():SetSetting(IncentiveProgram.Settings["HIDE_IN_PARTY"], false)
-    IncentiveProgram:GetSettings():SetSetting(IncentiveProgram.Settings["HIDE_ALWAYS"], false)
-    IncentiveProgram:GetFrame():ShowFrame()
+    --IncentiveProgram:GetSettings():SetSetting(IncentiveProgram.Settings["HIDE_IN_PARTY"], false)
+    --IncentiveProgram:GetSettings():SetSetting(IncentiveProgram.Settings["HIDE_ALWAYS"], false)
+    --IncentiveProgram:GetFrame():ShowFrame()
+	InterfaceOptionsFrame_OpenToCategory(IncentiveProgramInterfacePanel) 
 end
 
 -----------------------------------------
@@ -41,7 +42,6 @@ end
 ----      GROUP_ROSTER_UPDATE
 ----      LFG_UPDATE_RANDOM_INFO
 ----      LFG_ROLE_UPDATE
-----      LFG_UPDATE
 -----------------------------------------
 function eventFrame:OnEvent(event, ...)
     if ( event == "VARIABLES_LOADED" ) then
@@ -51,7 +51,6 @@ function eventFrame:OnEvent(event, ...)
         self:RegisterEvent("GROUP_ROSTER_UPDATE")
         self:RegisterEvent("LFG_UPDATE_RANDOM_INFO")
         self:RegisterEvent("LFG_ROLE_UPDATE")
-        self:RegisterEvent("LFG_UPDATE")
     elseif ( event == "GROUP_ROSTER_UPDATE" or event == "LFG_UPDATE" ) then --Party Update
         if IsInGroup() then
             if ( IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["HIDE_IN_PARTY"]) ) then
@@ -64,23 +63,82 @@ function eventFrame:OnEvent(event, ...)
             RequestLFDPlayerLockInfo()
         end
     elseif ( event == "LFG_UPDATE_RANDOM_INFO" ) then --Received new LFD Info
-        IncentiveProgram:SetCount(IncentiveProgram:GetDungeon():GetShortageCount())
-    elseif ( event == "LFG_ROLE_UPDATE" ) then --updated the role
-    
+		local count = IncentiveProgram:GetDungeon():GetShortageCount()
+        IncentiveProgram:SetCount(count)
+		if ( count == 0 ) then
+			eventFrame.continousEnabled = false
+		else
+			if ( IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["CONTINUOUSLY_CYCLE"]) ) then
+				eventFrame.continousEnabled = true
+			else
+				eventFrame.continousEnabled = false
+			end
+		end
     end
     
     if ( IncentiveProgram.SavedLFGRoles.isUpdated ) then
+	    IncentiveProgram.SavedLFGRoles.isUpdated = false
         SetLFGRoles(IncentiveProgram.SavedLFGRoles.Leader, IncentiveProgram.SavedLFGRoles.Tank, IncentiveProgram.SavedLFGRoles.Healer, IncentiveProgram.SavedLFGRoles.Damage)
-        IncentiveProgram.SavedLFGRoles.isUpdated = false
     end
 end
 
 function eventFrame:OnUpdate(e)
     self.elapsed = self.elapsed or (IncentiveProgram.TickRate - 5)
     self.elapsed = self.elapsed + e
-    self.alertCount = self.alertCount or 0
-    
-    if ( ( self.alertCount > 0 ) and ( self.elapsed > 1.5 ) ) then
+	
+	self.soundElapsed = self.soundElapsed or 0
+	self.soundElapsed = self.soundElapsed + e
+	self.soundCountAlert = self.soundCountAlert or 0
+	self.soundCountToast = self.soundCountToast or 0
+	
+	self.cycleElapsed = self.cycleElapsed or 0
+	self.cycleElapsed = self.cycleElapsed + e
+    self.cycleCount = self.cycleCount or 0
+
+	if ( self.elapsed >= IncentiveProgram.TickRate ) then
+		self.elapsed = 0
+		if ( not IsInGroup() ) then --can't get incentives in a group anyways.  Seems to still trigger
+									--when in LFR dungeons anyways, so ignore it now.
+			RequestLFDPlayerLockInfo()
+		end
+	end
+	
+	if ( self.soundElapsed >= IncentiveProgram.SoundRate ) then
+		self.soundElapsed = 0
+		if ( self.soundCountAlert > 0 ) then
+			local successful = PlaySoundKitID(IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["ALERT_SOUND"]))
+			if successful then self.soundCountAlert = self.soundCountAlert - 1 end
+		end
+		
+		if ( self.soundCountToast > 0 ) then
+			local successful = PlaySoundKitID(IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["TOAST_SOUND"]))
+			if successful then self.soundCountToast = self.soundCountToast - 1 end
+		end
+	end
+	
+	if ( self.cycleElapsed >= IncentiveProgram.CycleRate ) then
+		self.cycleElapsed = 0
+		
+		if ( self.cycleCount == 0 and self.continousEnabled ) then
+			self.cycleCount = 3
+		end
+		if ( self.cycleCount > 0 ) then
+			if ( ( self.cycleCount % 3 ) == 0 ) then
+				IncentiveProgram:SetCount(IncentiveProgram:GetDungeon():GetShortageCount()
+					,IncentiveProgram.Icons["INCENTIVE_PLENTIFUL"])
+			elseif ( ( self.cycleCount % 3 ) == 1 ) then
+				IncentiveProgram:SetCount(IncentiveProgram:GetDungeon():GetShortageCount()
+					,IncentiveProgram.Icons["INCENTIVE_UNCOMMON"])
+			else
+				IncentiveProgram:SetCount(IncentiveProgram:GetDungeon():GetShortageCount()
+					,IncentiveProgram.Icons["INCENTIVE_RARE"])
+			end
+			self.cycleCount = self.cycleCount - 1
+		end
+	end
+	
+	
+    --[[if ( ( self.alertCount > 0 ) and ( self.elapsed > 1.5 ) ) then
         if ( ( self.alertCount % 3 ) == 0 ) then
             IncentiveProgram:SetCount(IncentiveProgram:GetDungeon():GetShortageCount()
                 ,IncentiveProgram.Icons["INCENTIVE_PLENTIFUL"])
@@ -91,7 +149,7 @@ function eventFrame:OnUpdate(e)
             IncentiveProgram:SetCount(IncentiveProgram:GetDungeon():GetShortageCount()
                 ,IncentiveProgram.Icons["INCENTIVE_RARE"])
         end
-        PlaySound("UI_GroupFinderReceiveApplication")
+        PlaySoundKitID(47615)
         self.alertCount = self.alertCount - 1
         
         if ( self.alertCount > 0 ) then
@@ -99,15 +157,7 @@ function eventFrame:OnUpdate(e)
         else
             self.elapsed = IncentiveProgram.TickRate - self.elapsed
         end
-    end
-    
-    if self.elapsed > IncentiveProgram.TickRate then
-        self.elapsed = self.elapsed - IncentiveProgram.TickRate
-		if ( not IsInGroup() ) then --can't get incentives in a group anyways.  Seems to still trigger
-									--when in LFR dungeons anyways, so ignore it now.
-			RequestLFDPlayerLockInfo()
-		end
-    end
+    end]]
 end
 
 ---------------------------------------
@@ -146,11 +196,33 @@ end
 ---------------------------------------
 function IncentiveProgram:SetAlert(line1, line2, texture, arg1, arg2)
     if ( IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["ALERT"]) ) then
-        eventFrame.elapsed = 0 --reset timer for alert animation instead
-        eventFrame.alertCount = 6 -- how many times to cycle alert
+        eventFrame.cycleCount = 3 * IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["CYCLE_COUNT"])
+		IncentiveProgram:SetSound(IncentiveProgram.ALERT)
     end
     
     if ( IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["ALERT_TOAST"]) ) then
         IncentiveProgram:GetToast():AddToast(line1, line2, texture, arg1, arg2, IncentiveProgram:GetMenu().JoinDungeon)
+		IncentiveProgram:SetSound(IncentiveProgram.TOAST)
     end
+end
+
+---------------------------------------
+-- SetSound queues up the Event Frame to play sounds.  I did have this just in SetAlert, but I decided
+-- 		I wanted the Toast Sounds to queue up on each new Toast pop up.  But then I decided again that
+--		I did not want that, but I kept the function just in case I changed my mind again.
+-- @params
+--      alertType - Enum ALERT or TOAST to queue up a sound.
+-- @returns
+--		nil
+---------------------------------------
+function IncentiveProgram:SetSound(alertType)
+	if ( alertType == IncentiveProgram.ALERT ) then
+		if ( IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["ALERT_PING"]) ) then
+			eventFrame.soundCountAlert = tonumber(IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["ALERT_REPEATS"])) or 0
+		end
+	elseif ( alertType == IncentiveProgram.TOAST ) then
+		if ( IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["TOAST_PING"]) ) then
+			eventFrame.soundCountToast = tonumber(IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["TOAST_REPEATS"])) or 0
+		end
+	end
 end

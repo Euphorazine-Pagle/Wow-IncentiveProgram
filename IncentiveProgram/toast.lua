@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r8 | 10/27/2016------
+--------r9 | 11/02/2016------
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -232,7 +232,8 @@ local IncentiveProgramToast = {
         
         self:UpdateAnchor()
         toastFrame:Show();
-        PlaySoundKitID(18019) --BNet toast frame ping
+        --PlaySoundKitID(18019) --BNet toast frame ping --Done in core.lua now.
+		--IncentiveProgram:SetSound(IncentiveProgram.TOAST) --decided against playing sound on each toast refresh
         toastFrame.glowFrame.animIn:Play()
         toastFrame.waitAndAnimOut:Stop()
         if toastFrame:IsMouseOver() then

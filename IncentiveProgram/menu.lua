@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r8 | 10/27/2016------
+--------r9 | 11/02/2016------
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -114,7 +114,13 @@ local menuData = {
 				["tooltipTitle"] = IncentiveProgram.ADDON_DISPLAY_NAME,
 				["tooltipText"] = IncentiveProgram.ContextLabels["TOOLTIP_IGNORE_LFR"],
 				["tooltipOnButton"] = 1
-            }
+            },
+			[6] = {
+				text = IncentiveProgram.ContextLabels["INTERFACE_PANEL"],
+				arg1 = IncentiveProgram.ContextMenu["INTERFACE_PANEL"],
+				notCheckable = true,
+				leftPadding = 16
+			}
         }
     }
 }
@@ -501,7 +507,9 @@ local IncentiveProgramMenu = {
             end
             
             IncentiveProgram:SetCount(IncentiveProgram:GetDungeon():GetShortageCount()) --Refresh Count
-        end
+        elseif ( arg1 == IncentiveProgram.ContextMenu["INTERFACE_PANEL"] ) then
+			InterfaceOptionsFrame_OpenToCategory(IncentiveProgramInterfacePanel) 
+		end
     end,
    
 ---------------------------------------
