@@ -106,12 +106,12 @@ function eventFrame:OnUpdate(e)
 	if ( self.soundElapsed >= IncentiveProgram.SoundRate ) then
 		self.soundElapsed = 0
 		if ( self.soundCountAlert > 0 ) then
-			local successful = PlaySoundKitID(IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["ALERT_SOUND"]))
+			local successful = PlaySoundKitID(IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["ALERT_SOUND"]), IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["CHANNEL"]))
 			if successful then self.soundCountAlert = self.soundCountAlert - 1 end
 		end
 		
 		if ( self.soundCountToast > 0 ) then
-			local successful = PlaySoundKitID(IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["TOAST_SOUND"]))
+			local successful = PlaySoundKitID(IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["TOAST_SOUND"]), IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["CHANNEL"]))
 			if successful then self.soundCountToast = self.soundCountToast - 1 end
 		end
 	end

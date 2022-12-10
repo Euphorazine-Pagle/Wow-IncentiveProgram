@@ -78,7 +78,8 @@ IncentiveProgram.Settings = {
 	TOAST_SOUND = "toastSound",
 	TOAST_REPEATS = "toastRepeats",
 	CYCLE_COUNT = "cycleCount",
-	CONTINUOUSLY_CYCLE = "continuouslyCycle"
+	CONTINUOUSLY_CYCLE = "continuouslyCycle",
+	CHANNEL = "channel"
 }
 
 IncentiveProgram.TickRate  = 20

@@ -86,8 +86,9 @@ local IncentiveProgramFrame = {
         ipFrame.text:SetPoint("CENTER", 0, -5)
         ipFrame.text:SetNonSpaceWrap(false)
         
+		print("race ya")
         ipFrame.menu = IncentiveProgram:CreateMenu(ipFrame)
-        UIDropDownMenu_Initialize(ipFrame.menu.frame, ipFrame.menu.MenuOnLoad, "MENU")
+        Lib_UIDropDownMenu_Initialize(ipFrame.menu.frame, ipFrame.menu.MenuOnLoad, "MENU")
         
         self.ipFrame = ipFrame
     end,
@@ -112,12 +113,12 @@ local IncentiveProgramFrame = {
             self:GetUIMenuFrame().point = "BOTTOMLEFT"
             self:GetUIMenuFrame().relativeTo = anchorFrame
             self:GetUIMenuFrame().relativePoint = "TOPRIGHT"
-            ToggleDropDownMenu(1, nil, self:GetUIMenuFrame(), anchorFrame, 0, 0)
+            Lib_ToggleDropDownMenu(1, nil, self:GetUIMenuFrame(), anchorFrame, 0, 0)
         elseif ( button == "RightButton" ) then
             self:GetUIMenuFrame().point = "BOTTOMLEFT"
             self:GetUIMenuFrame().relativeTo = anchorFrame
             self:GetUIMenuFrame().relativePoint = "TOPRIGHT"
-            ToggleDropDownMenu(1, nil, self:GetUIMenuFrame(), anchorFrame, 0, 0)
+            Lib_ToggleDropDownMenu(1, nil, self:GetUIMenuFrame(), anchorFrame, 0, 0)
         end
     end,
     

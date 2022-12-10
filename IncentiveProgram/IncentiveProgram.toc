@@ -2,12 +2,15 @@
 ## Title: Incentive Program
 ## Notes: Notifies when there are LFG Incentives waiting for you.
 ## Author: Xubera
-## Version: r10
+## Version: r11
 ## SavedVariables: IncentiveProgramDB
 
 libs/LibStub.lua
 libs/CallbackHandler-1.0.lua
 libs/LibDataBroker-1.1.lua
+libs/DropDownMenu/UIDropDownMenuTemplates.xml
+libs/DropDownMenu/EasyMenu.lua
+libs/DropDownMenu/UIDropDownMenu.lua
 
 constants.lua
 menu.lua

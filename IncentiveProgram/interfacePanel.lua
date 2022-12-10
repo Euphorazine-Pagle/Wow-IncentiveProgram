@@ -38,8 +38,19 @@ local function getSetting(element)
 end
 
 local function checkButtonOnClick(self, button)
-	setSetting(self, self:GetChecked())
-	self:SetChecked(getSetting(self))
+	if self.buttonList then
+		for _, b in pairs(self.buttonList) do
+			if b == self then
+				self:SetChecked(true)
+				setSetting(self, self.value)
+			else
+				b:SetChecked(false)
+			end
+		end
+	else
+		setSetting(self, self:GetChecked())
+		self:SetChecked(getSetting(self))
+	end
 end
 
 local function loadSettings(panel)
@@ -66,6 +77,15 @@ local function loadSettings(panel)
 	--Cycles
 	panel.cyclesCount:SetText(getSetting(panel.cyclesCount))
 	panel.cyclesContinuous:SetChecked(getSetting(panel.cyclesContinuous))
+	
+	local channel = getSetting(panel.soundsChannelDefault)
+	for _, b in pairs(panel.soundsChannelDefault.buttonList) do
+		if b.value == channel then
+			b:SetChecked(true)
+		else
+			b:SetChecked(false)
+		end
+	end
 end
 
 local function createCheckButton(panel, subname, text, anchorFrame, anchorPoint, anchorTo, xOffset, yOffset, settingKey, userSetting, dungeonSetting, dungeonID, tooltip)
@@ -143,6 +163,37 @@ local function createEditBox(panel, subname, text, anchorFrame, anchorPoint, anc
 	return eb
 end
 
+local function createRadioButton(panel, subname, text, anchorFrame, anchorPoint, anchorTo, xOffset, yOffset, settingKey, userSetting, dungeonSetting, dungeonID, tooltip, buttonList, value)
+	local rb = CreateFrame("CheckButton", panel:GetName()..subname, panel, "UIRadioButtonTemplate")
+	rb.text:SetText(text) --.text from UICheckButtonTemplate
+	rb:SetPoint(anchorPoint, anchorFrame, anchorTo, xOffset, yOffset)
+	rb.settingKey = settingKey
+	rb.userSetting = userSetting
+	rb.dungeonSetting = dungeonSetting
+	rb.dungeonID = dungeonID
+	rb.tooltip = tooltip
+	rb:SetScript("OnClick", checkButtonOnClick)
+
+	rb:SetScript("OnEnter", function(self, ...)
+		if self.tooltip then
+			GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+			GameTooltip:AddLine(IncentiveProgram.ADDON_DISPLAY_NAME, 1.0, 1.0, 1.0)
+			GameTooltip:AddLine(self.tooltip, nil, nil, nil, true)
+			GameTooltip:Show()
+		end
+	end)
+	
+	rb:SetScript("OnLeave", function(self, ...)
+		GameTooltip:Hide()
+	end)
+	
+	table.insert(buttonList, rb)
+	rb.buttonList = buttonList
+	rb.value = value
+	
+	return rb
+end
+
 local function createInterfacePanel()
 
 	--Add an interface panel to the blizzard AddOn Interface UI
@@ -212,6 +263,8 @@ local function createInterfacePanel()
 	panel.soundsHeader:SetText(IncentiveProgram.ContextLabels["SOUNDS"])
 	panel.soundsHeader:SetPoint("TOPLEFT", panel.generalHeader, "BOTTOMLEFT", 0, -95)
 	
+	--Sounds
+	----Alert Ping
 	panel.soundsAlertPing = createCheckButton(panel, "SoundsAlertPing", IncentiveProgram.ContextLabels["ALERT_PING"],
 		panel.soundsHeader, "LEFT", "RIGHT", 20, 0, IncentiveProgram.Settings["ALERT_PING"], nil, nil, nil)
 		
@@ -227,7 +280,8 @@ local function createInterfacePanel()
 	panel.soundsAlertTest.Text:SetText("Test") --.Text from UIPanelButtonTemplate
 	panel.soundsAlertTest:SetScript("OnClick", function(self)
 		local soundID = getSetting(panel.soundsAlertSound)
-		PlaySoundKitID(soundID)
+		local channel = getSetting(panel.soundsChannelDefault)
+		PlaySoundKitID(soundID, channel)
 	end)
 		
 	panel.soundsAlertRepeatsLabel = panel:CreateFontString(panel:GetName().."SoundAlertRepeatsLabel", "ARTWORK", "GameFontNormalSmall")
@@ -237,6 +291,8 @@ local function createInterfacePanel()
 	panel.soundsAlertRepeats = createEditBox(panel, "SoundsAlertRepeats", IncentiveProgram.ContextLabels["REPEATS"],
 		panel.soundsAlertRepeatsLabel, "LEFT", "RIGHT", 15, 1, IncentiveProgram.Settings["ALERT_REPEATS"], nil, nil, nil, IncentiveProgram.ContextLabels["TOOLTIP_SOUND_REPEATS"])
 	
+	--Sounds
+	----Toast Ping
 	panel.soundsToastPing = createCheckButton(panel, "SoundsToastPing", IncentiveProgram.ContextLabels["TOAST_PING"],
 		panel.soundsAlertPing, "TOPLEFT", "BOTTOMLEFT", 0, 0, IncentiveProgram.Settings["TOAST_PING"], nil, nil, nil)
 		
@@ -252,7 +308,8 @@ local function createInterfacePanel()
 	panel.soundsToastTest.Text:SetText("Test") --.Text from UIPanelButtonTemplate
 	panel.soundsToastTest:SetScript("OnClick", function(self)
 		local soundID = getSetting(panel.soundsToastSound)
-		PlaySoundKitID(soundID)
+		local channel = getSetting(panel.soundsChannelDefault)
+		PlaySoundKitID(soundID, channel)
 	end)
 		
 	panel.soundsToastRepeatsLabel = panel:CreateFontString(panel:GetName().."SoundToastRepeatsLabel", "ARTWORK", "GameFontNormalSmall")
@@ -261,6 +318,23 @@ local function createInterfacePanel()
 	
 	panel.soundsToastRepeats = createEditBox(panel, "SoundsToastRepeats", IncentiveProgram.ContextLabels["REPEATS"],
 		panel.soundsToastRepeatsLabel, "LEFT", "RIGHT", 15, 1, IncentiveProgram.Settings["TOAST_REPEATS"], nil, nil, nil, IncentiveProgram.ContextLabels["TOOLTIP_SOUND_REPEATS"])
+	
+	--Sounds
+	----Channel Radio
+	local tblRadioChannel = {}
+	
+	panel.soundsChannelLabel = panel:CreateFontString(panel:GetName().."SoundChannelLabel", "ARTWORK", "GameFontNormalSmall")
+	panel.soundsChannelLabel:SetText("Channel:")
+	panel.soundsChannelLabel:SetPoint("TOPLEFT", panel.soundsToastPing, "BOTTOMLEFT", 0, -10)
+	
+	panel.soundsChannelDefault = createRadioButton(panel, "SoundsChannelDefault", "Sounds *", panel.soundsChannelLabel, "LEFT", "RIGHT", 15, 0, IncentiveProgram.Settings["CHANNEL"]
+	, nil, nil, nil, "This is the default channel.", tblRadioChannel, "SFX")	
+	panel.soundsChannelMusic = createRadioButton(panel, "SoundsChannelMusic", "Music", panel.soundsChannelDefault, "LEFT", "RIGHT", 60, 0, IncentiveProgram.Settings["CHANNEL"]
+	, nil, nil, nil, nil, tblRadioChannel, "Music")	
+	panel.soundsChannelAmbience = createRadioButton(panel, "SoundsChannelAmbience", "Ambience", panel.soundsChannelMusic, "LEFT", "RIGHT", 60, 0, IncentiveProgram.Settings["CHANNEL"]
+	, nil, nil, nil, nil, tblRadioChannel, "Ambience")	
+	panel.soundsChannelMaster = createRadioButton(panel, "SoundsChannelMaster", "Master *", panel.soundsChannelAmbience, "LEFT", "RIGHT", 60, 0, IncentiveProgram.Settings["CHANNEL"]
+	, nil, nil, nil, "This plays at the Master Volume Slider's level, even if Sound Effects are disabled. ", tblRadioChannel, "Master")
 	
 	--Cycles
 	panel.cyclesHeader = panel:CreateFontString(panel:GetName().."SoundsHeader", "ARTWORK", "Game15Font")

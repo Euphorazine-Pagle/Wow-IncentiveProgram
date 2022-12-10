@@ -40,6 +40,7 @@ local defaultSettings = {}
 	defaultSettings[IncentiveProgram.Settings["TOAST_REPEATS"]] = 1
 	defaultSettings[IncentiveProgram.Settings["CYCLE_COUNT"]] = 2
 	defaultSettings[IncentiveProgram.Settings["CONTINUOUSLY_CYCLE"]] = false
+	defaultSettings[IncentiveProgram.Settings["CHANNEL"]] = "SFX"
 
 
 ---------------------------------------
