@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r12 | 04/02/2017-----
+--------r15 | 06/22/2017-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -108,16 +108,16 @@ end
 
 local function sendAlert(dungeonID, tempKey)
 	local flair = IncentiveProgram.Flair[dungeonID] or ""
-	local name = IncentiveProgram:GetSettings():GetDungeonSetting(dungeonID, IncentiveProgram.Settings["DUNGEON_NAME"])
+	local name = IncentiveProgram:GetSettings():GetDungeonSetting(dungeonID, IncentiveProgram.Settings["DUNGEON_NAME"]) or ""
 	local line1 = flair..name
 	
 	local line2 = getAlertText(tempKey) or ""
 
 	local texture = select(11, GetLFGDungeonInfo(dungeonID))
-	if ( texture and texture ~= "" ) then
+	if ( texture and texture ~= "" and type(texture) ~= "number" ) then
 		texture = "Interface\\LFGFrame\\UI-LFG-BACKGROUND-"..texture
 	else
-		texture = 348520
+		texture = texture or 348520
 	end
 	
 	local ignoreCompletedLFRs = IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["IGNORE_COMPLETED_LFR"])

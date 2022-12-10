@@ -352,6 +352,15 @@ local function createInterfacePanel()
 		panel.cyclesCount, "LEFT", "RIGHT", 65, 0, IncentiveProgram.Settings["CONTINUOUSLY_CYCLE"], nil, nil, nil, IncentiveProgram.ContextLabels["TOOLTIP_CONTINUOUSLY_CYCLE"])
 	
 	
+	--Reset Button
+	panel.resetPositionBtn = CreateFrame("BUTTON", panel:GetName().."ResetPosition", panel, "UIPanelButtonTemplate")
+	panel.resetPositionBtn:SetText(IncentiveProgram.ContextLabels["RESET_POSITION"])
+	panel.resetPositionBtn:SetWidth(100)
+	panel.resetPositionBtn:SetPoint("TOPLEFT", panel.cyclesHeader, "BOTTOMLEFT", 0, -25)
+	panel.resetPositionBtn:SetScript("OnClick", function()
+		IncentiveProgram:GetFrame():ResetFramePosition()
+	end)
+	
 	--Tell Bliz's interface frame to update and show the interface panel
     InterfaceAddOnsList_Update();
 	

@@ -202,10 +202,15 @@ local IncentiveProgramToast = {
         
         toastFrame.middleLine:SetText(line1)
         toastFrame.bottomLine:SetText(line2)
-        if texture then
+        if ( texture and type(texture) == "number" and texture ~= 348520 ) then
             toastFrame.iconTexture:SetTexture(texture)
-        else
+			toastFrame.iconTexture:SetTexCoord(0.1, 0.6, 0, 1)
+        elseif ( texture ) then
+            toastFrame.iconTexture:SetTexture(texture)
+			toastFrame.iconTexture:SetTexCoord(0, 1, 0, 1)
+		else
             toastFrame.iconTexture:SetTexture(348520) --satchel texture ID
+			toastFrame.iconTexture:SetTexCoord(0, 1, 0, 1)
         end
         
         if arg1 then

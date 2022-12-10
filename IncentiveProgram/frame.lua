@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r12 | 04/02/2017-----
+--------r15 | 06/22/2017-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -236,7 +236,21 @@ local IncentiveProgramFrame = {
 ---------------------------------------
     GetUIMenuFrame = function(self)
         return self.ipFrame.menu.frame
-    end
+    end,
+	
+---------------------------------------
+-- ResetFramePosition places the frame in the center of the screen
+-- @params
+--      self - Frame Class
+-- @returns
+--		Nil
+---------------------------------------
+	ResetFramePosition = function(self)
+		self.ipFrame:ClearAllPoints()
+		self.ipFrame:SetPoint("CENTER", 32, 0)
+        IncentiveProgram:GetSettings():SetSetting(IncentiveProgram.Settings["FRAME_TOP"], self.ipFrame:GetTop())
+        IncentiveProgram:GetSettings():SetSetting(IncentiveProgram.Settings["FRAME_LEFT"], self.ipFrame:GetLeft())
+	end
 }
 
 ---------------------------------------

@@ -2,7 +2,7 @@
 ------Incentive Program------
 ----Created by: Jacob Beu----
 -----Xubera @ US-Alleria-----
---------r12 | 04/02/2017-----
+--------r15 | 06/22/2017-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -31,7 +31,11 @@ IncentiveProgram.Flair = {
     [1290] = "NH1 - ",
     [1291] = "NH2 - ",
     [1292] = "NH3 - ",
-    [1293] = "NH4 - "
+    [1293] = "NH4 - ",
+	[1494] = "TS1 - ",
+	[1495] = "TS2 - ",
+	[1496] = "TS3 - ",
+	[1497] = "TS4 - "
     
 }
 
@@ -159,5 +163,7 @@ IncentiveProgram.ContextLabels = {
 	TEST = "Test",
 	
 	ANIM_CYCLES = "Cycles",
-	CONTINUOUSLY_CYCLE = "Continuously Cycle"
+	CONTINUOUSLY_CYCLE = "Continuously Cycle",
+	
+	RESET_POSITION = "Reset Position"
 }

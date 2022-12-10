@@ -2,7 +2,7 @@
 ## Title: Incentive Program
 ## Notes: Notifies when there are LFG Incentives waiting for you.
 ## Author: Xubera
-## Version: r14
+## Version: r15
 ## SavedVariables: IncentiveProgramDB
 
 libs/LibStub.lua
