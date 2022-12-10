@@ -34,7 +34,7 @@ local IncentiveProgramToast = {
 --		nil
 ---------------------------------------
     CreateFrame = function(self)
-        local toastFrame = CreateFrame("Frame", "IncentiveProgramToastFrame", UIParent)
+        local toastFrame = CreateFrame("Frame", "IncentiveProgramToastFrame", UIParent, BackdropTemplateMixin and "BackdropTemplate")
         toastFrame:Hide()
         
         toastFrame:SetFrameStrata("LOW")
