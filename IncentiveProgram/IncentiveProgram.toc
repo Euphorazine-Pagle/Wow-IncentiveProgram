@@ -1,7 +1,7 @@
 ## Interface: 100002
 ## Title: Incentive Program
 ## Notes: Notifies when there are LFG Incentives waiting for you.
-## Author: Xubera, Grubsey
+## Author: Xubera, Grubsey, Syl
 ## Version: r18
 ## SavedVariables: IncentiveProgramDB
 
