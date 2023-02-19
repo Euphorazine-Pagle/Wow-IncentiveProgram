@@ -1,8 +1,8 @@
-## Interface: 100002
+## Interface: 100005
 ## Title: Incentive Program
 ## Notes: Notifies when there are LFG Incentives waiting for you.
 ## Author: Xubera, Grubsey, Syl
-## Version: r20
+## Version: r21
 ## SavedVariables: IncentiveProgramDB
 
 libs/LibStub.lua

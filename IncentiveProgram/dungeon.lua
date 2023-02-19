@@ -4,7 +4,7 @@
 -----Xubera @ US-Alleria-----
 -----------Grubsey-----------
 -------------Syl-------------
---------r20 | 12/10/2022-----
+--------r21 | 02/19/2023-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -125,12 +125,10 @@ local function sendAlert(dungeonID, tempKey)
 	local ignoreCompletedLFRs = IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["IGNORE_COMPLETED_LFR"])
 	local ignoreDungeon = IncentiveProgram:GetSettings():GetDungeonSetting(dungeonID, IncentiveProgram.Settings["IGNORE"])
 	
-	if ( ignoreCompletedLFRs ) then
-		local encounterDone, encounterTotal = GetLFGDungeonNumEncounters(dungeonID)
-
-		if ( encounterDone == 0 ) then --Not an LFR, so alert.
-			IncentiveProgram:SetAlert(line1, line2, texture, dungeonID)
-		elseif ( encounterDone ~= encounterTotal ) then --all of the LFRs have not been completed.
+	local encounterDone, encounterTotal = GetLFGDungeonNumEncounters(dungeonID)
+	
+	if ( encounterTotal > 0 ) then
+		if ( encounterDone ~= encounterTotal or not ignoreCompletedLFRs ) then --all of the LFRs have not been completed.
 			IncentiveProgram:SetAlert(line1, line2, texture, dungeonID)
 		end
 	elseif (not ignoreDungeon ) then
