@@ -4,11 +4,12 @@
 -----Xubera @ US-Alleria-----
 -----------Grubsey-----------
 -------------Syl-------------
---------r21 | 02/19/2023-----
+--------r22 | 2024/07/27-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
+local minimap = LibStub("LibDBIcon-1.0")
 
 --Local copy of the class
 local databroker
@@ -34,6 +35,8 @@ local IncentiveProgramDataBroker = {
                 IncentiveProgram:GetFrame():OnClick(button, down, clickedframe)
             end
         })
+
+        minimap:Register("IncentiveProgram", obj.dataBroker, IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["MINIMAP"]))
         
         return obj
     end,

@@ -4,7 +4,7 @@
 -----Xubera @ US-Alleria-----
 -----------Grubsey-----------
 -------------Syl-------------
---------r21 | 02/19/2023-----
+--------r22 | 2024/07/27-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -65,20 +65,26 @@ local function loadSettings(panel)
 	panel.generalHideInParty:SetChecked(getSetting(panel.generalHideInParty))
 	panel.generalHideAlways:SetChecked(getSetting(panel.generalHideAlways))
 	panel.generalHideEmpty:SetChecked(getSetting(panel.generalHideEmpty))
+	panel.generalHideMinimap:SetChecked(getSetting(panel.generalHideMinimap))
 	panel.generalAlert:SetChecked(getSetting(panel.generalAlert))
 	panel.generalAlertToast:SetChecked(getSetting(panel.generalAlertToast))
 	panel.generalIgnoreCompletedLFR:SetChecked(getSetting(panel.generalIgnoreCompletedLFR))
 	
 	--Sounds
 	panel.soundsAlertPing:SetChecked(getSetting(panel.soundsAlertPing))
-	panel.soundsAlertSound:SetText(getSetting(panel.soundsAlertSound))
-	panel.soundsAlertRepeats:SetText(getSetting(panel.soundsAlertRepeats))
+	panel.soundsAlertSound:SetText("")
+	panel.soundsAlertSound:Insert(getSetting(panel.soundsAlertSound))
+	panel.soundsAlertRepeats:SetText("")
+	panel.soundsAlertRepeats:Insert(getSetting(panel.soundsAlertRepeats))
 	panel.soundsToastPing:SetChecked(getSetting(panel.soundsToastPing))
-	panel.soundsToastSound:SetText(getSetting(panel.soundsToastSound))
-	panel.soundsToastRepeats:SetText(getSetting(panel.soundsToastRepeats))
+	panel.soundsToastSound:SetText("")
+	panel.soundsToastSound:Insert(getSetting(panel.soundsToastSound))
+	panel.soundsToastRepeats:SetText("")
+	panel.soundsToastRepeats:Insert(getSetting(panel.soundsToastRepeats))
 	
 	--Cycles
-	panel.cyclesCount:SetText(getSetting(panel.cyclesCount))
+	panel.cyclesCount:SetText("")
+	panel.cyclesCount:Insert(getSetting(panel.cyclesCount))
 	panel.cyclesContinuous:SetChecked(getSetting(panel.cyclesContinuous))
 	
 	local channel = getSetting(panel.soundsChannelDefault)
@@ -212,8 +218,15 @@ local function createInterfacePanel()
 	panel.refresh = function(self, ...)
 		loadSettings(self)
 	end
+
+	panel:SetScript("OnShow", function(self, ...)
+		panel.refresh(self, ...)
+	end)
 	
-	InterfaceOptions_AddCategory(panel)
+	--InterfaceOptions_AddCategory(panel)
+	local category = Settings.RegisterCanvasLayoutCategory(panel, "Incentive Program")
+	Settings.RegisterAddOnCategory(category)
+	IncentiveProgram.InterfacePanelCategory = category
 	
 	--Header
 	panel.title = panel:CreateFontString(panel:GetName().."Title", "ARTWORK", "Game18Font")
@@ -259,6 +272,9 @@ local function createInterfacePanel()
 	
 	panel.generalAlertToast = createCheckButton(panel, "GeneralAlertToast", IncentiveProgram.ContextLabels["ALERT_TOAST"],
 		panel.generalAlert, "LEFT", "RIGHT", 100, 0, IncentiveProgram.Settings["ALERT_TOAST"], nil, nil, nil)
+		
+	panel.generalHideMinimap = createCheckButton(panel, "GeneralHideMinimap", IncentiveProgram.ContextLabels["HIDE_MINIMAP"],
+		panel.generalAlertToast, "LEFT", "RIGHT", 100, 0, IncentiveProgram.Settings["HIDE_MINIMAP"], nil, nil, nil)
 	
 	panel.generalIgnoreCompletedLFR = createCheckButton(panel, "GeneralIgnoreCompletedLFR", IncentiveProgram.ContextLabels["IGNORE_COMPLETED_LFR"],
 		panel.generalAlert, "TOPLEFT", "BOTTOMLEFT", 0, 0, IncentiveProgram.Settings["IGNORE_COMPLETED_LFR"], nil, nil, nil, IncentiveProgram.ContextLabels["TOOLTIP_IGNORE_LFR"])
@@ -368,6 +384,8 @@ local function createInterfacePanel()
 	
 	--test
 	--InterfaceOptionsFrame_OpenToCategory(IncentiveProgramInterfacePanel) 
+
+	loadSettings(panel)
 end
 
 IncentiveProgram.CreateInterfacePanel = createInterfacePanel

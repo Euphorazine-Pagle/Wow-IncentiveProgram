@@ -4,7 +4,7 @@
 -----Xubera @ US-Alleria-----
 -----------Grubsey-----------
 -------------Syl-------------
---------r21 | 02/19/2023-----
+--------r22 | 2024/07/27-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -518,7 +518,8 @@ local IncentiveProgramMenu = {
             
             IncentiveProgram:SetCount(IncentiveProgram:GetDungeon():GetShortageCount()) --Refresh Count
         elseif ( arg1 == IncentiveProgram.ContextMenu["INTERFACE_PANEL"] ) then
-			InterfaceOptionsFrame_OpenToCategory(IncentiveProgramInterfacePanel) 
+			--InterfaceOptionsFrame_OpenToCategory(IncentiveProgramInterfacePanel)
+            Settings.OpenToCategory(IncentiveProgram.InterfacePanelCategory.ID, "")
 		end
     end,
    

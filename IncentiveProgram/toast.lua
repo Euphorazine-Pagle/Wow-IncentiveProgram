@@ -4,7 +4,7 @@
 -----Xubera @ US-Alleria-----
 -----------Grubsey-----------
 -------------Syl-------------
---------r21 | 02/19/2023-----
+--------r22 | 2024/07/27-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -229,8 +229,12 @@ local IncentiveProgramToast = {
         
         if func then
             toastFrame.clickFrame.func = func
-            toastFrame.clickFrame:SetScript("OnClick", function(s, ...)
-                s.func(IncentiveProgram:GetMenu(), s.arg1, s.arg2)
+            toastFrame.clickFrame:SetScript("OnClick", function(s, button, ...)
+                
+                if (button == "LeftButton") then
+                    s.func(IncentiveProgram:GetMenu(), s.arg1, s.arg2)
+                end
+
                 toastFrame:Hide()
             end)
         else

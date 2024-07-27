@@ -4,7 +4,7 @@
 -----Xubera @ US-Alleria-----
 -----------Grubsey-----------
 -------------Syl-------------
---------r21 | 02/19/2023-----
+--------r22 | 2024/07/27-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -34,7 +34,8 @@ function SlashCmdList.INCENTIVEPROGRAM(msg, editbox)
     --IncentiveProgram:GetSettings():SetSetting(IncentiveProgram.Settings["HIDE_IN_PARTY"], false)
     --IncentiveProgram:GetSettings():SetSetting(IncentiveProgram.Settings["HIDE_ALWAYS"], false)
     --IncentiveProgram:GetFrame():ShowFrame()
-	InterfaceOptionsFrame_OpenToCategory(IncentiveProgramInterfacePanel) 
+	--InterfaceOptionsFrame_OpenToCategory(IncentiveProgramInterfacePanel) 
+    Settings.OpenToCategory(IncentiveProgram.InterfacePanelCategory.ID, "")
 end
 
 -----------------------------------------
