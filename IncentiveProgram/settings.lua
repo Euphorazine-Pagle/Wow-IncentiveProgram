@@ -4,7 +4,7 @@
 -----Xubera @ US-Alleria-----
 -----------Grubsey-----------
 -------------Syl-------------
---------r21 | 02/19/2023-----
+--------r22 | 2024/07/27-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
@@ -20,6 +20,7 @@ local defaultSettings = {}
     defaultSettings[IncentiveProgram.Settings["HIDE_IN_PARTY"]] = true
     defaultSettings[IncentiveProgram.Settings["HIDE_ALWAYS"]] = false
 	defaultSettings[IncentiveProgram.Settings["HIDE_EMPTY"]] = false
+	defaultSettings[IncentiveProgram.Settings["HIDE_MINIMAP"]] = true
     defaultSettings[IncentiveProgram.Settings["ALERT"]] = true
     defaultSettings[IncentiveProgram.Settings["ALERT_TOAST"]] = false
     defaultSettings[IncentiveProgram.Settings["COUNT_EVEN_IF_NOT_SELECTED"]] = false
@@ -34,6 +35,7 @@ local defaultSettings = {}
     
     defaultSettings[IncentiveProgram.Settings["FRAME_TOP"]] = -1
     defaultSettings[IncentiveProgram.Settings["TOAST_TOP"]] = -1
+    defaultSettings[IncentiveProgram.Settings["MINIMAP"]] = {}
 	
 	defaultSettings[IncentiveProgram.Settings["ALERT_PING"]] = true
 	defaultSettings[IncentiveProgram.Settings["ALERT_SOUND"]] = 47615

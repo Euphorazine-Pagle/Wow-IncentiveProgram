@@ -4,12 +4,13 @@
 -----Xubera @ US-Alleria-----
 -----------Grubsey-----------
 -------------Syl-------------
---------r21 | 02/19/2023-----
+--------r22 | 2024/07/27-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
 
 local LibDD = LibStub:GetLibrary("LibUIDropDownMenu-4.0")
+local minimap = LibStub("LibDBIcon-1.0")
 
 --Local copy of the class
 local frame
@@ -207,6 +208,13 @@ local IncentiveProgramFrame = {
 			self:ShowFrame()
 		end
 		
+        local hideMinimap = IncentiveProgram:GetSettings():GetSetting(IncentiveProgram.Settings["HIDE_MINIMAP"])
+        if ( hideMinimap ) then
+            minimap:Hide("IncentiveProgram")
+        else
+            minimap:Show("IncentiveProgram")
+        end
+
     end,
     
 ---------------------------------------

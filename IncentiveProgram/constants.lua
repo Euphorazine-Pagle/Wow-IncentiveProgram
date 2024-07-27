@@ -4,13 +4,13 @@
 -----Xubera @ US-Alleria-----
 -----------Grubsey-----------
 -------------Syl-------------
---------r21 | 02/19/2023-----
+--------r22 | 2024/07/27-----
 -----------------------------
 
 local addonName, IncentiveProgram = ...
 
 --Core
-IncentiveProgram.VERSION_NUMBER = GetAddOnMetadata(addonName, "Version") 
+IncentiveProgram.VERSION_NUMBER = C_AddOns.GetAddOnMetadata(addonName, "Version") 
 IncentiveProgram.ADDON_DISPLAY_NAME = addonName.." (|cFF69CCF0"..IncentiveProgram.VERSION_NUMBER.."|r)"
 
 IncentiveProgram.Flair = {
@@ -70,6 +70,7 @@ IncentiveProgram.Settings = {
     HIDE_IN_PARTY = "hideInParty",
     HIDE_ALWAYS = "hideAlways", --still shows in databroker
 	HIDE_EMPTY = "hideEmpty",
+    HIDE_MINIMAP = "hideMinimap",
     ALERT = "alert",
     ALERT_TOAST = "toastAlert",
     COUNT_EVEN_IF_NOT_SELECTED = "countEvenIfNotSelected",
@@ -84,6 +85,7 @@ IncentiveProgram.Settings = {
     FRAME_LEFT = "frameLeft",
     TOAST_TOP = "toastTop",
     TOAST_LEFT = "toastLeft",
+    MINIMAP = "minimap",
 	
 	ALERT_PING = "alertPing",
 	ALERT_SOUND = "alertSound",
@@ -146,6 +148,7 @@ IncentiveProgram.ContextLabels = {
     HIDE_IN_PARTY = "Hide in Party",
     HIDE_ALWAYS = "Hide Always",
 	HIDE_EMPTY = "Hide When Empty",
+    HIDE_MINIMAP = "Hide Minimap Icon",
     ALERT = "Alert When New",
     ALERT_TOAST = "Alert With Toast",
 	IGNORE_COMPLETED_LFR = "Ignore Completed LFRs",
