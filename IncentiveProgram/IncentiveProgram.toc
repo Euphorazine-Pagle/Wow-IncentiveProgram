@@ -3,7 +3,7 @@
 ## Notes: Notifies when there are LFG Incentives waiting for you.
 ## IconTexture: Interface\Icons\INV_Misc_Coin_17
 ## Author: Xubera, Grubsey, Syl
-## Version: r22
+## Version: r23
 ## SavedVariables: IncentiveProgramDB
 
 libs/LibStub.lua
